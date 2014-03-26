@@ -1,0 +1,10 @@
+1 open
+1 Envoi de données vers le distant #1
+2 open
+3 open
+3 envoi de données vers le distant #3
+1 close
+2 envoi de données vers le distant #2
+3 envoi de d'autres données au distant #3
+3 close
+2 close
