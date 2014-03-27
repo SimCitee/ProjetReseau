@@ -15,4 +15,5 @@ public abstract class Paquet {
 	public abstract void setTypePaquet(TypePaquet typePaquet);
 	
 	public abstract String toString();
+	
 }

@@ -36,7 +36,7 @@ public class Reseau  extends Thread{
 		ecrireVersTransport("stop");
 	}
 	
-	//Lecture de la couche réseau
+	//Lecture de la couche reseau
 	private void lireDeTransport()
 	{
 		String command = "";
@@ -70,7 +70,7 @@ public class Reseau  extends Thread{
         }
 	}
 	
-	//Écriture sur la couche transport
+	//ecriture sur la couche transport
 	private void ecrireVersTransport(String chaine)
 	{
 
@@ -80,11 +80,9 @@ public class Reseau  extends Thread{
 			for(int i=0; i < chaine.length(); i++)
 			{
 				reseauOut.write(chaine.charAt(i));
-				
 			}
           
 			reseauOut.flush();
-			
 			
 		} catch(Exception e) {
         	

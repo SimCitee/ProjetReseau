@@ -1,10 +1,10 @@
 package Paquet;
 
 public class PaquetCommunicationEtablie extends Paquet {
-	private String adresseSource;
-	private String adresseDestination;
+	private int adresseSource;
+	private int adresseDestination;
 	
-	public PaquetCommunicationEtablie(String numeroConnexion, String adresseSource, String adresseDestination) {
+	public PaquetCommunicationEtablie(String numeroConnexion, int adresseSource, int adresseDestination) {
 		super(numeroConnexion);
 		super.typePaquet = new TypePaquet("00001111");
 		this.adresseSource = adresseSource;
@@ -31,19 +31,19 @@ public class PaquetCommunicationEtablie extends Paquet {
 		super.typePaquet = typePaquet;
 	}
 
-	public String getAdresseSource() {
+	public int getAdresseSource() {
 		return adresseSource;
 	}
 
-	public void setAdresseSource(String adresseSource) {
+	public void setAdresseSource(int adresseSource) {
 		this.adresseSource = adresseSource;
 	}
 
-	public String getAdresseDestination() {
+	public int getAdresseDestination() {
 		return adresseDestination;
 	}
 
-	public void setAdresseDestination(String adresseDestination) {
+	public void setAdresseDestination(int adresseDestination) {
 		this.adresseDestination = adresseDestination;
 	}
 
@@ -51,4 +51,5 @@ public class PaquetCommunicationEtablie extends Paquet {
 	public String toString() {
 		return super.numeroConnexion + super.typePaquet.toString() + adresseSource + adresseDestination;
 	}
+	
 }

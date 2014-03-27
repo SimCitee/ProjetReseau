@@ -66,4 +66,8 @@ public class TypePaquet {
 	public String toString() {
 		return valeur + pr + m + ps + last;
 	}
+	
+	public int getDecimalPs() {
+		return Integer.parseInt(this.ps, 2);
+	}
 }
