@@ -9,49 +9,44 @@ import OSI.Transport;
 public class Program {
 
 	public static void main(String[] args) {
-		
-		
-		
-		
-		
-		
-		
+
 		try
 		{ 
 			
 			//Crée les pipes
 			PipedOutputStream transportOut = new PipedOutputStream();
 			PipedInputStream reseauIn = new PipedInputStream(transportOut);
-	
 			PipedOutputStream reseauOut = new PipedOutputStream();
 			PipedInputStream transportIn = new PipedInputStream(reseauOut);
 	
 			//Crée les couches
 			Transport coucheTransport = new Transport(transportOut, transportIn);
-
 			Reseau coucheReseau = new Reseau(reseauOut, reseauIn);
 	
 			
 			
-			//Démarre le thread de la couche réseau
+			///Overture de la couche réseau
 			coucheReseau.start();
 			
-			
-			
-			//Lecture du fichier de tests
+			//Lecture du fichier d'input
 			coucheTransport.readInputFile();
-
-			coucheTransport.lireDeReseau();
+			
+			//La couche transport lit le réseau
+			coucheTransport.start();
+			
+			
+			
+			
 			
 			
 			
 			//Fermeture des pipes
 			try {
+				PipedOutputStream a = new PipedOutputStream();
+				a.close();
+				//transportOut.close();
 				
-				
-				transportOut.close();
-				
-				reseauOut.close();
+				//reseauOut.close();
 				
 				
 				

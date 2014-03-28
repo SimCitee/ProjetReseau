@@ -11,7 +11,7 @@ import util.LecteurFichier;
  * Couche transport
  * 
  */
-public class Transport{
+public class Transport extends Thread{
 	
 	PipedOutputStream transportOut;
 	PipedInputStream transportIn;
@@ -50,16 +50,21 @@ public class Transport{
 				String s[] = ligne.split("\\s");
 				
 				//Exécute la commande contenue dans le fichier
-				doUserCommand(Integer.parseInt(s[0]), s[1]);
+				executerCommandeUtilisateur(Integer.parseInt(s[0]), s[1]);
 			}
 		}
 		
 		//Ferme le fichier
 		lecteurFichier.close();
 		
-		//Envoie une commande de fermeture à la couche réseau
-		ecrireVersReseau("stop");
-		
+	}
+	
+	//Débute la lecture de la couche réseau (thread)
+	@Override
+	public void run()
+	{
+
+		lireDeReseau();
 	}
 	
 	/*
@@ -71,13 +76,13 @@ public class Transport{
 	 *     3. Fermeture de connexion
 	 *     
 	 */
-	private void doUserCommand(int applicationPid, String command)
+	private void executerCommandeUtilisateur(int applicationPid, String command)
 	{
 		
 		//Ouverture de connexion
 		if(command.equals("open"))
 		{
-			openConnection(applicationPid);
+			ouvrirConnexion(applicationPid);
 			
 			
 		}
@@ -95,7 +100,7 @@ public class Transport{
 	}
 	
 	//Ouverture d'une connexion
-	private void openConnection(int applicationPid)
+	private void ouvrirConnexion(int applicationPid)
 	{
 		//Marque la connexion comme ouverte dans la table
 		tableConnexion.openConnection(applicationPid);
@@ -116,9 +121,7 @@ public class Transport{
 			
 			for(int i=0; i < chaine.length(); i++)
 			{
-				//System.out.println("Ecriture de : " + chaine.charAt(i));
 				transportOut.write(chaine.charAt(i));
-				//transportOut.write('c');
 			}
           
 			transportOut.flush();
@@ -128,47 +131,51 @@ public class Transport{
         	
 			throw new RuntimeException(e);
         }
-		
 	}
 	
 	//Lecture de la couche réseau
-	public void lireDeReseau()
+	private void lireDeReseau()
 	{
+		
 		String command = "";
 		try {
-			
-			while(true){
-				char c = (char)transportIn.read();
+			char c;
+			do{
+				
+				c = (char)transportIn.read();
+				
 				if(c == '|')
 				{
 					if(!command.equals("stop"))
 					{
-						executerCommandeReseau(command);
+						recevoirCommandeReseau(command);
 						command = "";
 					}
 					else{
-						
+						//Arrêt de la couche transport
 						break;
 					}
-					
 				}
 				else
 				{
 					//Ajoute le charactère lu à la chaine
 					command += c;
 				}
-
-			}
+			
+			//Demande d'arrêt par la couche réseau
+			}while((int)c != 65535);
+			//}while(true);
           
 		} catch(Exception e) {
         	
-			throw new RuntimeException(e);
+			//throw new RuntimeException(e);
+			System.out.println("Arret de lecture de la couche transport");
         }
 	}
 	
-	private void executerCommandeReseau(String command)
+	private void recevoirCommandeReseau(String command)
 	{
-		System.out.println("Commande reçu du réseau : " + command);
+		System.out.println("Transport recois une commande de réseau : " + command);
 	}
 
 }

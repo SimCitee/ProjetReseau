@@ -26,29 +26,25 @@ public class Reseau  extends Thread{
 		//Débute la lecture de la couche transport
 		lireDeTransport();
 		
-		//Tests d'écriture vers la couche transport
-		//TODO à enlever
-		ecrireVersTransport("Commande #1");
-		ecrireVersTransport("Commande #2");
-		ecrireVersTransport("Commande #3");
 		
-		//TODO L'aisser ici, il faut une facon de dire à la couche transport quelle arrête sa lecture
-		ecrireVersTransport("stop");
 	}
 	
-	//Lecture de la couche reseau
+	//Lecture de la couche transport
 	private void lireDeTransport()
 	{
+		
 		String command = "";
 		try {
-			
-			while(true){
-				char c = (char)reseauIn.read();
+			char c;
+			do{
+				
+				c = (char)reseauIn.read();
+				
 				if(c == '|')
 				{
 					if(!command.equals("stop"))
 					{
-						doUserCommand(command);
+						executerCommandeTransport(command);
 						command = "";
 					}
 					else{
@@ -61,25 +57,28 @@ public class Reseau  extends Thread{
 					//Ajoute le charactère lu à la chaine
 					command += c;
 				}
-
-			}
+			
+			//Demande d'arrêt par le producteur
+			}while((int)c != 65535);
           
 		} catch(Exception e) {
         	
-			throw new RuntimeException(e);
+			//throw new RuntimeException(e);
+			System.out.println("Arret de lecture de la couche réseau");
         }
 	}
 	
 	//ecriture sur la couche transport
-	private void ecrireVersTransport(String chaine)
+	public void ecrireVersTransport(String chaine)
 	{
-
 		chaine += '|';	//Ajoute le délimiteur à la chaîne
 		try {
 			
 			for(int i=0; i < chaine.length(); i++)
 			{
+				//System.out.println("Ecriture de : " + chaine.charAt(i));
 				reseauOut.write(chaine.charAt(i));
+				//transportOut.write('c');
 			}
           
 			reseauOut.flush();
@@ -88,12 +87,16 @@ public class Reseau  extends Thread{
         	
 			throw new RuntimeException(e);
         }
-		
 	}
 	
 	//Les commande complètes provenant de la couche transport sont ici!!!
-	private void doUserCommand(String command)
+	private void executerCommandeTransport(String command)
 	{
-		System.out.println("Commande provenant de la couche transport : " + command);
+		System.out.println("Réseau recois une commande de transport : " + command);
+		
+		//TODO Joe et Phil, vous commencer ICI!!!! Point d'entré des données de la couche transport. 
+		ecrireVersTransport("Données de réseau vers transport");	//Réécriture du "résultat" vers la couche Transport
 	}
+	
+	
 }
