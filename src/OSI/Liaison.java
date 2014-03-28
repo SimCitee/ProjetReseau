@@ -29,47 +29,50 @@ public class Liaison {
 		return instance;
 	}
 	
-	public void lireDeReseau(PaquetCommunicationEtablie packet) {
-		//inscrire le packet dans le fichier de sortie
-		ecrireVersPhysique((Paquet) packet);
+	//inscrit tout les paquets venant de la couche reseau dans un fichier
+	public void lireDeReseau(Paquet paquet) {
+		//inscrire le paquet dans le fichier de sortie
+		ecrireVersPhysique(paquet);
 		
 		//appel de la méthode simulant la réception
-		lireDePhysique(packet);
+		lireDePhysique(paquet);
 	}
 	
-	public void lireDeReseau(PaquetDonnee packet) {
-		//inscrire le packet dans le fichier de sortie
-		ecrireVersPhysique((Paquet) packet);
+	// Simule la reception des paquets du distant en generant les paquets de reponses
+	public String lireDePhysique(Paquet paquet) {
 		
-		//appel de la méthode simulant la réception
-		lireDePhysique(packet);
-	}
-	
-	public String lireDePhysique(PaquetCommunicationEtablie packet) {
-		
-		if ((packet.getAdresseSource() % 19) == 0)
-			return null;
-		else if ((packet.getAdresseSource() % 13) == 0)
-			return Constante.DISCONNECT_IND;
-		else 
-			return Constante.CONNECT_CONF;
-	}
-	
-	public String lireDePhysique(PaquetDonnee packet) {
-		
-		Random rand = new Random();
-		int aleatoire = rand.nextInt(7);
-		
-		if (packet.getTypePaquet().getDecimalPs() == aleatoire) {
-			return null;
+		// Si le paquet est une demande de connection
+		if (paquet instanceof PaquetCommunicationEtablie) {
+			
+			// Si l'adresse source est un multiple de 19, aucune reponse
+			if ((((PaquetCommunicationEtablie) paquet).getAdresseSource() % 19) == 0)
+				return null;
+			// Si l'adresse source est un multiple de 13, refuser la connexion
+			else if ((((PaquetCommunicationEtablie) paquet).getAdresseSource() % 13) == 0)
+				return Constante.DISCONNECT_IND;
+			// Sinon, accepter la connexion
+			else 
+				return Constante.CONNECT_CONF;
 		}
+		// Si paquet de donnees
+		else if (paquet instanceof PaquetDonnee) {
+			Random rand = new Random();
+			int aleatoire = rand.nextInt(7);
+			
+			// Si le Ps du paquet est equivalent au numero tire aleatoirement, acquittement negatif
+			if (paquet.getTypePaquet().getDecimalPs() == aleatoire)
+				return null;
+		}
+		
 		return null;
+		
+		
 	}
 	
-	private void ecrireVersPhysique(Paquet packet) {
+	private void ecrireVersPhysique(Paquet paquet) {
 		
 		try {
-			RedacteurFichier.ecrireFichier(Constante.L_ECR_NAME, packet.toString());
+			RedacteurFichier.ecrireFichier(Constante.L_ECR_NAME, paquet.toString());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
