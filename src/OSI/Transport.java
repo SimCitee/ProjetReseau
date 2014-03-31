@@ -109,7 +109,7 @@ public class Transport extends Thread{
 		int destinationAddress = tableConnexion.getDestinationAddress(applicationPid);
 		
 		//Passe la requête à la couche réseau
-		ecrireVersReseau("N_CONNECT.req " + sourceAddress + " " + destinationAddress);
+		ecrireVersReseau(applicationPid + " N_CONNECT.req " + sourceAddress + " " + destinationAddress);
 		
       
 	}

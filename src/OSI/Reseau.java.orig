@@ -29,7 +29,11 @@ public class Reseau  extends Thread{
 		
 	}
 	
+<<<<<<< HEAD
+	//Lecture de la couche reseau
+=======
 	//Lecture de la couche transport
+>>>>>>> Fixed - pipes entre tansport et réseau
 	private void lireDeTransport()
 	{
 		
@@ -68,8 +72,13 @@ public class Reseau  extends Thread{
         }
 	}
 	
+<<<<<<< HEAD
 	//ecriture sur la couche transport
+	private void ecrireVersTransport(String chaine)
+=======
+	//Écriture sur la couche transport
 	public void ecrireVersTransport(String chaine)
+>>>>>>> Fixed - pipes entre tansport et réseau
 	{
 		chaine += '|';	//Ajoute le délimiteur à la chaîne
 		try {
@@ -78,7 +87,10 @@ public class Reseau  extends Thread{
 			{
 				//System.out.println("Ecriture de : " + chaine.charAt(i));
 				reseauOut.write(chaine.charAt(i));
+<<<<<<< HEAD
+=======
 				//transportOut.write('c');
+>>>>>>> Fixed - pipes entre tansport et réseau
 			}
           
 			reseauOut.flush();
@@ -92,8 +104,6 @@ public class Reseau  extends Thread{
 	//Les commande complètes provenant de la couche transport sont ici!!!
 	private void executerCommandeTransport(String command)
 	{
-		
-		
 		System.out.println("Réseau recois une commande de transport : " + command);
 		
 		//TODO Joe et Phil, vous commencer ICI!!!! Point d'entré des données de la couche transport. 

@@ -28,11 +28,13 @@ public class Program {
 			///Overture de la couche réseau
 			coucheReseau.start();
 			
+			//La couche transport lit le réseau
+			coucheTransport.start();
+		
 			//Lecture du fichier d'input
 			coucheTransport.readInputFile();
 			
-			//La couche transport lit le réseau
-			coucheTransport.start();
+			
 			
 			
 			
