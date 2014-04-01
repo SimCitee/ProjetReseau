@@ -25,7 +25,7 @@ public class Paquet {
 	}
 
 	public String toString() {
-		return this.numeroConnexion + this.typePaquet.toString();
+		return this.numeroConnexion + " " + this.typePaquet.toString() + "\n";
 	}
 	
 }

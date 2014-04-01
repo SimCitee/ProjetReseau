@@ -29,7 +29,7 @@ public class PaquetCommunicationEtablie extends Paquet {
 
 	@Override
 	public String toString() {
-		return super.toString() + adresseSource + adresseDestination;
+		return this.numeroConnexion + " " + this.typePaquet.toString() + " " + adresseSource + " " + adresseDestination + "\n";
 	}
 	
 }

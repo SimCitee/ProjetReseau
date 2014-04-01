@@ -64,7 +64,12 @@ public class TypePaquet {
 	}
 	
 	public String toString() {
-		return valeur + pr + m + ps + last;
+		if (this.pr.equalsIgnoreCase("") && this.last.equalsIgnoreCase(""))
+			return "[" + valeur + "]";
+		else if (this.last.equalsIgnoreCase(""))
+			return "[" + valeur + "," + pr +  "]";
+		else
+			return "[" + valeur + "," + pr + "," + m + "," + ps + "," + last + "]";
 	}
 	
 	public int getDecimalPs() {
