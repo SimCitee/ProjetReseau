@@ -1,19 +1,31 @@
 package Paquet;
 
-public abstract class Paquet {
-	protected String numeroConnexion;
+public class Paquet {
+	protected int numeroConnexion;
 	protected TypePaquet typePaquet;
 	
-	public Paquet(String numeroConnexion) {
+	public Paquet(int numeroConnexion) {
 		this.numeroConnexion = numeroConnexion;
 	}
 	
-	public abstract String getNumeroConnexion();
-	public abstract void setNumeroConnexion(String numeroConnexion);
-	
-	public abstract TypePaquet getTypePaquet();
-	public abstract void setTypePaquet(TypePaquet typePaquet);
-	
-	public abstract String toString();
+	public int getNumeroConnexion() {
+		return numeroConnexion;
+	}
+
+	public void setNumeroConnexion(int numeroConnexion) {
+		this.numeroConnexion = numeroConnexion;
+	}
+
+	public TypePaquet getTypePaquet() {
+		return typePaquet;
+	}
+
+	public void setTypePaquet(TypePaquet typePaquet) {
+		this.typePaquet = typePaquet;
+	}
+
+	public String toString() {
+		return this.numeroConnexion + this.typePaquet.toString();
+	}
 	
 }

@@ -3,47 +3,27 @@ package Paquet;
 public class PaquetIndicationLiberation extends Paquet {
 	private final String DISTANT = "00000001";
 	private final String FOURNISSEUR = "00000010";
-	private String adresseSource;
-	private String adresseDestination;
+	private int adresseSource;
+	private int adresseDestination;
 	private String raison;
 	
-	public PaquetIndicationLiberation(String numeroConnexion, String adresseSource, String adresseDestination, String refu) {
+	public PaquetIndicationLiberation(int numeroConnexion, int adresseSource, int adresseDestination, String refu) {
 		super(numeroConnexion);
 		super.typePaquet = new TypePaquet("00010011");
 		this.adresseSource = adresseSource;
 		this.adresseDestination = adresseDestination;
 		setRaison(refu);
 	}
-	
-	@Override
-	public String getNumeroConnexion() {
-		return super.numeroConnexion;
-	}
 
-	@Override
-	public void setNumeroConnexion(String numeroConnexion) {
-		super.numeroConnexion = numeroConnexion;
-	}
-
-	@Override
-	public TypePaquet getTypePaquet() {
-		return super.typePaquet;
-	}
-
-	@Override
-	public void setTypePaquet(TypePaquet typePaquet) {
-		super.typePaquet = typePaquet;
-	}
-
-	public String getAdresseSource() {
+	public int getAdresseSource() {
 		return adresseSource;
 	}
 
-	public void setAdresseSource(String adresseSource) {
+	public void setAdresseSource(int adresseSource) {
 		this.adresseSource = adresseSource;
 	}
 
-	public String getAdresseDestination() {
+	public int getAdresseDestination() {
 		return adresseDestination;
 	}
 
@@ -59,12 +39,12 @@ public class PaquetIndicationLiberation extends Paquet {
 		return raison;
 	}
 
-	public void setAdresseDestination(String adresseDestination) {
+	public void setAdresseDestination(int adresseDestination) {
 		this.adresseDestination = adresseDestination;
 	}
 
 	@Override
 	public String toString() {
-		return super.numeroConnexion + super.typePaquet.toString() + adresseSource + adresseDestination + raison;
+		return super.toString() + adresseSource + adresseDestination + raison;
 	}
 }

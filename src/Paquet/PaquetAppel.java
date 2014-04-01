@@ -1,50 +1,34 @@
 package Paquet;
 
 public class PaquetAppel extends Paquet {
-	private String adresseSource;
-	private String adresseDestination;
+	private int adresseSource;
+	private int adresseDestination;
 	
-	public PaquetAppel(String numeroConnexion, String adresseSource, String adresseDestination) {
+	public PaquetAppel(int numeroConnexion, int adresseSource, int adresseDestination) {
 		super(numeroConnexion);
 		super.typePaquet = new TypePaquet("00001011");
 		this.adresseSource = adresseSource;
 		this.adresseDestination = adresseDestination;
 	}
-	
-	@Override
-	public String getNumeroConnexion() {
-		return super.numeroConnexion;
-	}
 
-	@Override
-	public void setNumeroConnexion(String numeroConnexion) {
-		super.numeroConnexion = numeroConnexion;
-	}
-
-	@Override
-	public TypePaquet getTypePaquet() {
-		return super.typePaquet;
-	}
-
-	@Override
-	public void setTypePaquet(TypePaquet typePaquet) {
-		super.typePaquet = typePaquet;
-	}
-
-	public void setAdresseSource(String adresseSource) {
+	public void setAdresseSource(int adresseSource) {
 		this.adresseSource = adresseSource;
 	}
 
-	public String getAdresseDestination() {
+	public int getAdresseSource() {
+		return adresseSource;
+	}
+
+	public int getAdresseDestination() {
 		return adresseDestination;
 	}
 
-	public void setAdresseDestination(String adresseDestination) {
+	public void setAdresseDestination(int adresseDestination) {
 		this.adresseDestination = adresseDestination;
 	}
 
 	@Override
 	public String toString() {
-		return super.numeroConnexion + super.typePaquet.toString() + adresseSource + adresseDestination;
+		return super.toString() + adresseSource + adresseDestination;
 	}
 }

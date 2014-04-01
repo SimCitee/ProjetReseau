@@ -12,4 +12,5 @@ public class Constante {
 	public static final String DISCONNECT_IND = "N_DISCONNECT.ind";
 	
 	public static final String L_ECR_NAME = System.getProperty("user.dir") + "\\src\\fichiers\\L_ecr.txt";
+	public static final String L_LEC_NAME = System.getProperty("user.dir") + "\\src\\fichiers\\L_lec.txt";
 }
