@@ -13,10 +13,12 @@ import util.LecteurFichier;
  */
 public class Transport extends Thread{
 	
+	//Pipes
 	PipedOutputStream transportOut;
 	PipedInputStream transportIn;
 	
-	public static final String S_LEC_NAME = System.getProperty("user.dir") + "\\src\\fichiers\\S_lec.txt";
+	//Fichier de lecture
+	private static final String S_LEC_NAME = System.getProperty("user.dir") + "\\src\\fichiers\\S_lec.txt";
 	
 	//Table des connexions
 	private TransportTableConnexion tableConnexion = new TransportTableConnexion();
@@ -57,6 +59,10 @@ public class Transport extends Thread{
 		//Ferme le fichier
 		lecteurFichier.close();
 		
+		//Envoit une commande de fermeture des tubes
+		ecrireVersReseau("stop");
+		
+		
 	}
 	
 	//Débute la lecture de la couche réseau (thread)
@@ -89,14 +95,17 @@ public class Transport extends Thread{
 		//Fermeture de connexion
 		else if (command.equals("close"))
 		{
-			
+			fermerConnexion(applicationPid);
 		}
 		
 		//Envoie de données
 		else
 		{
-			
+			//Dans ce cas, command == aux données à envoyer
 		}
+		
+		//TODO à enlever
+		//afficherTable();
 	}
 	
 	//Ouverture d'une connexion
@@ -109,9 +118,29 @@ public class Transport extends Thread{
 		int destinationAddress = tableConnexion.getDestinationAddress(applicationPid);
 		
 		//Passe la requête à la couche réseau
-		ecrireVersReseau(applicationPid + " N_CONNECT.req " + sourceAddress + " " + destinationAddress);
+		ecrireVersReseau(applicationPid + " " + Constante.CONNECT_REQ + " " + sourceAddress + " " + destinationAddress);
 		
       
+	}
+	
+	//Ferme une connexion en fonction du pid de l'application. Demandé par l'utilisateur (fichier S_lec)
+	private void fermerConnexion(int applicationPid)
+	{
+		tableConnexion.fermerConnexion(applicationPid);
+	}
+	
+	private void envoyerDonnees(int pid, String donnees)
+	{
+		//Vérifie si l'application est connecté
+		if(tableConnexion.getEstConnecte(pid))
+		{
+			//Evoie les données à la couche réseau
+			ecrireVersReseau(pid + " " + donnees);
+		}
+		else
+		{
+			//TODO afficher message d'erreur (envoi de données sans connexion)
+		}
 	}
 	
 	private void ecrireVersReseau(String chaine)
@@ -128,7 +157,7 @@ public class Transport extends Thread{
 			
 			
 		} catch(Exception e) {
-        	
+			e.printStackTrace();
 			throw new RuntimeException(e);
         }
 	}
@@ -152,7 +181,14 @@ public class Transport extends Thread{
 						command = "";
 					}
 					else{
-						//Arrêt de la couche transport
+						
+						//Le programme se termine après la fin du thread de lecture du réseau par la couche transport
+						System.out.println("Fin du programme");
+						
+						//Fermeture du tube de lecture
+						transportIn.close();
+						
+						//Arrêt de lecture sur la couche réseau
 						break;
 					}
 				}
@@ -163,19 +199,69 @@ public class Transport extends Thread{
 				}
 			
 			//Demande d'arrêt par la couche réseau
-			}while((int)c != 65535);
-			//}while(true);
+			//}while((int)c != 65535);
+			}while(true);
           
 		} catch(Exception e) {
         	
 			//throw new RuntimeException(e);
+			e.printStackTrace();
 			System.out.println("Arret de lecture de la couche transport");
         }
 	}
 	
 	private void recevoirCommandeReseau(String command)
 	{
-		System.out.println("Transport recois une commande de réseau : " + command);
+		
+		System.out.println("Transport reçoit une commande de réseau : " + command);
+		
+		if(command.equals("stop"))
+		{
+			
+		}
+		else
+		{
+			String splitCommand[] = command.split("\\s");
+			int pid = Integer.parseInt(splitCommand[0]);
+			String primitive = splitCommand[1];
+			int adresseEnReponse = Integer.parseInt(splitCommand[2]);
+			
+			
+			//Réception d'une indication de déconnexion (distant ou couche réseau)
+			if(primitive.equals(Constante.DISCONNECT_IND))
+			{
+				String raison = splitCommand[3];
+				
+				fermerConnexionParReseau(pid, adresseEnReponse, raison);
+			}
+			//Réception d'une confirmation de connexion
+			else if(primitive.equals(Constante.CONNECT_CONF))
+			{
+				confirmerConnexion(pid, adresseEnReponse);
+			}
+		}
+		
+		
+		
 	}
-
+	
+	//Marque une connexion comme confirmée
+	private void confirmerConnexion(int pid, int adresseEnReponse)
+	{
+		tableConnexion.confirmerConnexion(pid);
+	}
+	
+	//Ferme la connexion dans le cas où la couche réseau ou le distant le décide
+	private void fermerConnexionParReseau(int pid, int adresseEnReponse, String raison)
+	{
+		tableConnexion.fermerConnexion(pid);
+	}
+	
+	//TODO Effacer cette methode (tests uniquement)
+	public void afficherTable()
+	{
+		tableConnexion.afficher();
+		System.out.println("*******************************************************************");
+		
+	}
 }

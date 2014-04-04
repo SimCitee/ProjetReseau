@@ -63,7 +63,7 @@ public class Program {
 			e.printStackTrace();
 		}
 		
-		System.out.println("Fin du programme!");
+		
 	}
 
 }

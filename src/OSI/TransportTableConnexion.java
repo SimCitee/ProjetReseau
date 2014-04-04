@@ -21,7 +21,7 @@ public class TransportTableConnexion {
 		
 	}
 	
-	//Ouvre une connexion (status = "pending")
+	//Ouvre une connexion (status = "En cours...")
 	public void openConnection(int applicationPid)
 	{
 		//Génère deux addresses
@@ -46,14 +46,16 @@ public class TransportTableConnexion {
 		
 	}
 	//Ouvre une connexion (status = "established")
-	public void confirmConnection(int applicationPid)
+	public void confirmerConnexion(int applicationPid)
 	{
-		
+		//Marque la connexion comme étant établie
+		getTransportTableLigneByAppId(applicationPid).setConnectionEstablished(true);;
 	}
 	
-	public void closeConnection(int applicationPid)
+	public void fermerConnexion(int applicationPid)
 	{
-		
+		//Marque la connexion comme non établie
+		getTransportTableLigneByAppId(applicationPid).setConnectionEstablished(false);
 	}
 	
 	//Retourne l'adresse source en fonction d'un PID
@@ -67,6 +69,12 @@ public class TransportTableConnexion {
 	public int getDestinationAddress(int applicationPid)
 	{
 		return getTransportTableLigneByAppId(applicationPid).getDestinationAddress();
+	}
+	
+	//Détermine si une application est en état connecté
+	public boolean getEstConnecte(int applicationPid)
+	{
+		return getTransportTableLigneByAppId(applicationPid).isConnectionEstablished();
 	}
 	
 	//Retourne une ligne de la table de connexion en fonction du pid d'une application
@@ -115,6 +123,28 @@ public class TransportTableConnexion {
 		return address;
 	}
 	
+	
+	//TODO Effacer cette methode (tests uniquement)
+	public void afficher()
+	{
+		
+		//Header
+		System.out.format("%15s%15s%15s%15s\n", "PID", "Source", 
+				"Destination", "État");
+		
+		for(TransportTableLigne ligne : tableConnexion)
+		{
+			String etatConnexion = "En attente";
+			if(ligne.isConnectionEstablished())
+			{
+				etatConnexion = "Etablie";
+			}
+			
+			System.out.format("%15s%15s%15s%15s\n", ligne.applicationPid, ligne.sourceAddress, 
+					ligne.destinationAddress, etatConnexion);
+		}
+	}
+		
 	//Ligne de la table de connexion
 	private class TransportTableLigne
 	{
@@ -124,6 +154,9 @@ public class TransportTableConnexion {
 		private boolean isConnectionEstablished;
 		
 		
+		
+
+
 		public TransportTableLigne(int applicationPid, int sourceAddress, int destinationAddress) {
 			this.applicationPid = applicationPid;
 			this.sourceAddress = sourceAddress;
@@ -151,7 +184,15 @@ public class TransportTableConnexion {
 			this.destinationAddress = destinationAddress;
 		}
 
+		
+		public boolean isConnectionEstablished() {
+			return isConnectionEstablished;
+		}
 
+		public void setConnectionEstablished(boolean isConnectionEstablished) {
+			this.isConnectionEstablished = isConnectionEstablished;
+		}
+		
 		@Override
 		public String toString() {
 			return "TransportTableLigne [applicationPid=" + applicationPid

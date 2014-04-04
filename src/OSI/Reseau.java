@@ -52,7 +52,14 @@ public class Reseau  extends Thread{
 						command = "";
 					}
 					else{
-						//Arrêt de la couche transport
+						
+						//Envoi le signal d'arret de lecture à la couche transport
+						ecrireVersTransport("stop");
+						
+						//Fermeture du tube de lecture
+						reseauIn.close();
+						
+						//Arrêt de lecture de la couche réseau
 						break;
 					}
 				}
@@ -63,10 +70,11 @@ public class Reseau  extends Thread{
 				}
 			
 			//Demande d'arrêt par le producteur
-			}while((int)c != 65535);
+			//}while((int)c != 65535);
+			}while(true);
           
 		} catch(Exception e) {
-        	
+			e.printStackTrace();
 			//throw new RuntimeException(e);
 			System.out.println("Arret de lecture de la couche réseau");
         }
@@ -88,7 +96,7 @@ public class Reseau  extends Thread{
 			reseauOut.flush();
 			
 		} catch(Exception e) {
-        	
+			e.printStackTrace();
 			throw new RuntimeException(e);
         }
 	}
@@ -109,29 +117,30 @@ public class Reseau  extends Thread{
 		// AJOUTER LE NIEC DANS LA TABLE et lui associer un numéro de connexion
 		
 		// 
+		System.out.println("Réseau recois une commande de transport : " + command);
 		
 		switch (commandArray[1]) {
-		case "N_CONNECT.req" : 
-			int temp = Integer.parseInt(commandArray[2]);
-			if (temp % 27 == 0) {
-				paquet = new PaquetAppel(1, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]));
-			}
-			else {
-				versLiaison = false;
-				ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[3] + " Refus de connexion");
-			} break;
-		case "N_DATA.req" : break;
-		case "N_DISCONNECT.req" : paquet = new PaquetIndicationLiberation(1, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]), "Demande de transport"); break;
+			case "N_CONNECT.req" : 
+				int temp = Integer.parseInt(commandArray[2]);
+				if (temp % 27 == 0) {
+					paquet = new PaquetAppel(1, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]));
+				}
+				else {
+					versLiaison = false;
+					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[3] + " Refus de connexion");
+				} break;
+			case "N_DATA.req" : break;
+			case "N_DISCONNECT.req" : paquet = new PaquetIndicationLiberation(1, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]), "Demande de transport"); break;
 		}
 		
 		// Si retour == null -> temporisateur
 		if (versLiaison == true)
 			reponse = Liaison.getInstance().lireDeReseau(paquet);
 		
-		System.out.println("Réseau recois une commande de transport : " + command);
+		
 		
 		//TODO Joe et Phil, vous commencer ICI!!!! Point d'entré des données de la couche transport. 
-		ecrireVersTransport("Données de réseau vers transport");	//Réécriture du "résultat" vers la couche Transport
+		//ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[3] + " Refus de connexion");
 	}
 	
 	

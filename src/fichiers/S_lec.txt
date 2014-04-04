@@ -1,5 +1,5 @@
 1 open
-1 Envoi de données vers le distant #1
+1 envoi de données vers le distant #1
 2 open
 3 open
 3 envoi de données vers le distant #3
