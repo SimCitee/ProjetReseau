@@ -24,7 +24,7 @@ public class TransportTableConnexion {
 	//Ouvre une connexion (status = "En cours...")
 	public void openConnection(int applicationPid)
 	{
-		//Génère deux addresses
+		//Genere deux addresses
 		int adresseSource = getUnusedAddress();
 		int adresseDestination = getUnusedAddress();
 		
