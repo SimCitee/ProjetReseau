@@ -53,6 +53,15 @@ public class Transport extends Thread{
 				
 				//Exécute la commande contenue dans le fichier
 				executerCommandeUtilisateur(Integer.parseInt(s[0]), s[1]);
+				
+				try {
+					//Permet de mettre une certaine séquence dans l'envoi-réception de données vers/de
+					//la couche réseau. Par exemple, il faut recevoir une confirmation de connexion avant
+					//d'envoyer des données.
+					Thread.sleep(500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		
