@@ -83,7 +83,7 @@ public class Reseau  extends Thread{
 		} catch(Exception e) {
 			e.printStackTrace();
 			//throw new RuntimeException(e);
-			System.out.println("Arret de lecture de la couche réseau");
+			System.out.println("Arret de lecture de la couche reseau");
         }
 	}
 	
@@ -120,8 +120,7 @@ public class Reseau  extends Thread{
 		int noConnexion;
 		
 
-		System.out.println("Réseau recois une commande de transport : " + command);
-		
+		System.out.println("Reseau recois une commande de transport : " + command);
 		
 		// ON ENVOIE A LIAISON
 		

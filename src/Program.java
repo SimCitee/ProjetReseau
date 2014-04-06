@@ -13,45 +13,32 @@ public class Program {
 		try
 		{ 
 			
-			//Crée les pipes
+			//Cree les pipes
 			PipedOutputStream transportOut = new PipedOutputStream();
 			PipedInputStream reseauIn = new PipedInputStream(transportOut);
 			PipedOutputStream reseauOut = new PipedOutputStream();
 			PipedInputStream transportIn = new PipedInputStream(reseauOut);
 	
-			//Crée les couches
+			//Cree les couches
 			Transport coucheTransport = new Transport(transportOut, transportIn);
 			Reseau coucheReseau = new Reseau(reseauOut, reseauIn);
-	
 			
-			
-			///Overture de la couche réseau
+			///Ouverture de la couche reseau
 			coucheReseau.start();
 			
-			//La couche transport lit le réseau
+			//La couche transport lit le reseau
 			coucheTransport.start();
 		
 			//Lecture du fichier d'input
 			coucheTransport.readInputFile();
-			
-			
-			
-			
-			
-			
-			
-			
-			
+				
 			//Fermeture des pipes
 			try {
 				PipedOutputStream a = new PipedOutputStream();
 				a.close();
 				//transportOut.close();
 				
-				//reseauOut.close();
-				
-				
-				
+				//reseauOut.close();	
 				
 			} catch (IOException e) {
 				

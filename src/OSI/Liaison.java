@@ -105,6 +105,7 @@ public class Liaison {
 	}
 	
 	private void ecrireVersFichier(String nomFichier, Paquet paquet) {
+				
 		try {
 			RedacteurFichier.ecrireFichier(nomFichier, paquet.toString());
 		} catch (IOException e) {
