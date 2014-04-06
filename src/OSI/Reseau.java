@@ -2,10 +2,15 @@ package OSI;
 
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
+import java.util.ArrayList;
 import java.util.Random;
 
 import Paquet.Paquet;
+import Paquet.PaquetAcquittement;
+import Paquet.PaquetAcquittementNegatif;
 import Paquet.PaquetAppel;
+import Paquet.PaquetCommunicationEtablie;
+import Paquet.PaquetDonnee;
 import Paquet.PaquetIndicationLiberation;
 
 /*
@@ -17,6 +22,8 @@ public class Reseau  extends Thread{
 	//Pipes
 	PipedOutputStream reseauOut;
 	PipedInputStream reseauIn;
+	private int compteurNoConnexion = 1;
+	private ReseauTableConnexion tableConnexion = new ReseauTableConnexion();
 	
 	public Reseau(PipedOutputStream reseauOut, PipedInputStream reseauIn)
 	{
@@ -105,42 +112,107 @@ public class Reseau  extends Thread{
 	private void executerCommandeTransport(String command)
 	{
 		String[] commandArray = null;
+		ArrayList<Paquet> listePaquet = new ArrayList<Paquet>();
 		Paquet paquet = null;
 		Paquet reponse = null;
 		commandArray = command.split(" ");
 		boolean versLiaison = true;
+		int noConnexion;
 		
-		// TODO
-		//SI NIEC est dans TABLE CORRESPONDANCE
-		// POGNER le # connexion correspondant
-		// SINON
-		// AJOUTER LE NIEC DANS LA TABLE et lui associer un numéro de connexion
-		
-		// 
+
 		System.out.println("Réseau recois une commande de transport : " + command);
+		
+		
+		// ON ENVOIE A LIAISON
 		
 		switch (commandArray[1]) {
 			case "N_CONNECT.req" : 
 				int temp = Integer.parseInt(commandArray[2]);
+				
+				ajouterTableLigne(commandArray);
+				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(commandArray[0]));
+				
 				if (temp % 27 == 0) {
-					paquet = new PaquetAppel(1, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]));
+					paquet = new PaquetAppel(noConnexion, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]));
+					listePaquet.add(paquet);
 				}
 				else {
 					versLiaison = false;
-					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[3] + " Refus de connexion");
-				} break;
-			case "N_DATA.req" : break;
-			case "N_DISCONNECT.req" : paquet = new PaquetIndicationLiberation(1, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]), "Demande de transport"); break;
+					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Refus de connexion");
+					tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
+				} 
+				break;
+			case "N_DATA.req" :
+				String niec = commandArray[0];
+				String data = "";
+				String dataTemp;
+				int nbPaquet;
+				int compteurPaquet = 0;
+				
+				
+				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(niec));
+				
+				for (int i = 2; i < commandArray.length; i++) {
+					data += commandArray[i];
+					if (i < commandArray.length - 1)
+						data += " ";
+				}
+				nbPaquet = (int)Math.ceil(data.length() / 128);
+				
+				do {
+					if (data.length() < 128) {
+						paquet = new PaquetDonnee(noConnexion, "temp", "0", "temp", data);
+						listePaquet.add(paquet);
+					}
+					else {
+						dataTemp = data.substring(0, 128);
+						data = data.substring(128);
+						paquet = new PaquetDonnee(noConnexion, "temp", "1", "temp", dataTemp);
+						listePaquet.add(paquet);
+					}
+					compteurPaquet++;
+				} while (compteurPaquet < nbPaquet);
+				
+			case "N_DISCONNECT.req" : 
+				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(commandArray[0]));
+				
+				paquet = new PaquetIndicationLiberation(noConnexion, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]), "distant");
+				listePaquet.add(paquet);
+				tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
+				break;
+				// TODO
+				// Manque la gestion de la reponse de liaison (Pas encore coder du cote Liaison)
 		}
 		
-		// Si retour == null -> temporisateur
-		if (versLiaison == true)
-			reponse = Liaison.getInstance().lireDeReseau(paquet);
 		
+		// ON RECOIT DE LIAISON
 		
-		
-		//TODO Joe et Phil, vous commencer ICI!!!! Point d'entré des données de la couche transport. 
-		//ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[3] + " Refus de connexion");
+		if (versLiaison == true) {
+			for(Paquet element : listePaquet) {
+				reponse = Liaison.getInstance().lireDeReseau(element);
+			
+				// Temporisateur
+				if ((reponse == null) || (reponse instanceof PaquetAcquittementNegatif)) {
+					reponse = Liaison.getInstance().lireDeReseau(element);
+				}
+				
+				if (reponse instanceof PaquetIndicationLiberation) {
+					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Distant");
+					tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
+				}
+				else if (reponse instanceof PaquetCommunicationEtablie) {
+					ecrireVersTransport(commandArray[0] + " N_CONNECT.conf " + commandArray[2] + " " + commandArray[3]);
+					tableConnexion.connexionConfirmer(Integer.parseInt(commandArray[0]));
+				}
+				else if (reponse instanceof PaquetAcquittement) {
+					// TODO On fait quoi quand on a un paquet d'acquittement positif
+				}
+			}
+		}
+	}
+
+	private void ajouterTableLigne(String[] commandArray) {		
+		tableConnexion.nouvelleConnexion(compteurNoConnexion++, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]), Integer.parseInt(commandArray[0]));	
 	}
 	
 	
