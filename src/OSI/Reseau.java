@@ -147,9 +147,12 @@ public class Reseau  extends Thread{
 				String dataTemp;
 				int nbPaquet;
 				int compteurPaquet = 0;
-				
+				int nops;
+				int nopr;
 				
 				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(niec));
+				nops = tableConnexion.findNoPs(noConnexion);
+				nopr = tableConnexion.findNoPr(noConnexion);
 				
 				for (int i = 2; i < commandArray.length; i++) {
 					data += commandArray[i];
@@ -160,13 +163,13 @@ public class Reseau  extends Thread{
 				
 				do {
 					if (data.length() < 128) {
-						paquet = new PaquetDonnee(noConnexion, "temp", "0", "temp", data);
+						paquet = new PaquetDonnee(noConnexion, String.valueOf(nopr), "0", String.valueOf(nops), data);
 						listePaquet.add(paquet);
 					}
 					else {
 						dataTemp = data.substring(0, 128);
 						data = data.substring(128);
-						paquet = new PaquetDonnee(noConnexion, "temp", "1", "temp", dataTemp);
+						paquet = new PaquetDonnee(noConnexion, String.valueOf(nopr), "1", String.valueOf(nops), dataTemp);
 						listePaquet.add(paquet);
 					}
 					compteurPaquet++;
@@ -187,14 +190,19 @@ public class Reseau  extends Thread{
 		// ON RECOIT DE LIAISON
 		
 		if (versLiaison == true) {
-			for(Paquet element : listePaquet) {
-				reponse = Liaison.getInstance().lireDeReseau(element);
+			for(int i = 0; i < listePaquet.size(); i++) {
+				reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 			
 				// Temporisateur
-				if ((reponse == null) || (reponse instanceof PaquetAcquittementNegatif)) {
-					reponse = Liaison.getInstance().lireDeReseau(element);
+				if (reponse == null) {
+					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 				}
-				
+				if (reponse instanceof PaquetAcquittementNegatif) {
+					tableConnexion.augmenterPR(reponse.getNumeroConnexion());
+					augmenterPaquetPR(listePaquet, i+1);
+					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
+					
+				}
 				if (reponse instanceof PaquetIndicationLiberation) {
 					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Distant");
 					tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
@@ -205,8 +213,31 @@ public class Reseau  extends Thread{
 				}
 				else if (reponse instanceof PaquetAcquittement) {
 					// TODO On fait quoi quand on a un paquet d'acquittement positif
+					
+					tableConnexion.augmenterPR(reponse.getNumeroConnexion());
+					tableConnexion.augmenterPS(reponse.getNumeroConnexion());
+					augmenterPaquetPR(listePaquet, i+1);
+					augmenterPaquetPS(listePaquet, i+1);
 				}
 			}
+		}
+	}
+
+	private void augmenterPaquetPR(ArrayList<Paquet> listePaquet, int compteur) {
+		int temp;
+		for (int i = compteur; i < listePaquet.size(); i++) {
+			temp = Integer.parseInt(listePaquet.get(i).getTypePaquet().getPr());
+			temp++;
+			listePaquet.get(i+1).getTypePaquet().setPr(String.valueOf(temp));
+		}
+	}
+	
+	private void augmenterPaquetPS(ArrayList<Paquet> listePaquet, int compteur) {
+		int temp;
+		for (int i = compteur; i < listePaquet.size(); i++) {
+			temp = Integer.parseInt(listePaquet.get(i).getTypePaquet().getPs());
+			temp++;
+			listePaquet.get(i+1).getTypePaquet().setPs(String.valueOf(temp));
 		}
 	}
 
