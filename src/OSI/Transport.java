@@ -17,9 +17,6 @@ public class Transport extends Thread{
 	PipedOutputStream transportOut;
 	PipedInputStream transportIn;
 	
-	//Fichier de lecture
-	private static final String S_LEC_NAME = System.getProperty("user.dir") + "\\src\\fichiers\\S_lec.txt";
-	
 	//Table des connexions
 	private TransportTableConnexion tableConnexion = new TransportTableConnexion();
 	
@@ -27,16 +24,12 @@ public class Transport extends Thread{
 	{
 		this.transportOut = transportOut;
 		this.transportIn = transportIn;
-		
-		
 	}
-	
-	
 	
 	//Lit le fichier S_lec et traite chacunes des lignes
 	public void readInputFile()
 	{
-		LecteurFichier lecteurFichier = new LecteurFichier(S_LEC_NAME);
+		LecteurFichier lecteurFichier = new LecteurFichier(Constante.S_LEC_NAME);
 		String ligne;
 		
 		//Ouvre le fichier de lecture
@@ -75,7 +68,6 @@ public class Transport extends Thread{
 	@Override
 	public void run()
 	{
-
 		lireDeReseau();
 	}
 	
@@ -94,9 +86,7 @@ public class Transport extends Thread{
 		//Ouverture de connexion
 		if(command.equals("open"))
 		{
-			ouvrirConnexion(applicationPid);
-			
-			
+			ouvrirConnexion(applicationPid);	
 		}
 		//Fermeture de connexion
 		else if (command.equals("close"))

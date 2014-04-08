@@ -1,19 +1,19 @@
 package Paquet;
 
 public class Paquet {
-	protected int numeroConnexion;
+	protected int numeroVoieLogique;
 	protected TypePaquet typePaquet;
 	
 	public Paquet(int numeroConnexion) {
-		this.numeroConnexion = numeroConnexion;
+		this.numeroVoieLogique = numeroConnexion;
 	}
 	
 	public int getNumeroConnexion() {
-		return numeroConnexion;
+		return numeroVoieLogique;
 	}
 
 	public void setNumeroConnexion(int numeroConnexion) {
-		this.numeroConnexion = numeroConnexion;
+		this.numeroVoieLogique = numeroConnexion;
 	}
 
 	public TypePaquet getTypePaquet() {
@@ -25,7 +25,7 @@ public class Paquet {
 	}
 
 	public String toString() {
-		return this.numeroConnexion + " " + this.typePaquet.toString() + "\n";
+		return "Voie logique: "+ this.numeroVoieLogique + " Type paquet: " + this.typePaquet.toString() + "\n";
 	}
 	
 }

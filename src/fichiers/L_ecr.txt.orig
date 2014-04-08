@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+3 [00001011] 27 105
+=======
 Voie logique: 1 Type paquet: [00001011] Adresse source: 47 Adresse destination: 176
 Voie logique: 2 Type paquet: [00001011] Adresse source: 83 Adresse destination: 153
 Voie logique: 3 Type paquet: [00001011] Adresse source: 103 Adresse destination: 3
@@ -7,3 +10,4 @@ Voie logique: 6 Type paquet: [00001011] Adresse source: 175 Adresse destination:
 Voie logique: 7 Type paquet: [00001011] Adresse source: 214 Adresse destination: 29
 Voie logique: 8 Type paquet: [00001011] Adresse source: 97 Adresse destination: 226
 Voie logique: 9 Type paquet: [00001011] Adresse source: 31 Adresse destination: 155
+>>>>>>> 7e3638cb9d30b281bb7fc60ad3e8c5f665e4cb3a
