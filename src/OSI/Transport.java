@@ -47,7 +47,7 @@ public class Transport extends Thread{
 
 			{
 				//Separe la chaine avec l'espace (donne le pid[0] et la commande[1])
-				String s[] = ligne.split("\\s");
+				String s[] = ligne.split("\\s", 2);
 				
 				//Execute la commande contenue dans le fichier
 				executerCommandeUtilisateur(Integer.parseInt(s[0]), s[1]);
@@ -108,6 +108,7 @@ public class Transport extends Thread{
 		else
 		{
 			//Dans ce cas, command == aux donnees à envoyer
+			envoyerDonnees(applicationPid, command);
 		}
 		
 		//TODO à enlever
@@ -137,11 +138,12 @@ public class Transport extends Thread{
 	
 	private void envoyerDonnees(int pid, String donnees)
 	{
+		//ecrireVersReseau(pid + " " + Constante.DATA_REQ + " " + donnees);
 		//Verifie si l'application est connecte
 		if(tableConnexion.getEstConnecte(pid))
 		{
-			//Evoie les donnees � la couche reseau
-			ecrireVersReseau(pid + " " + donnees);
+			//Evoie les donnees � la couche reseau
+			ecrireVersReseau(pid + " " + Constante.DATA_REQ + " " + donnees);
 		}
 		else
 		{
@@ -152,6 +154,8 @@ public class Transport extends Thread{
 	private void ecrireVersReseau(String chaine)
 	{
 		chaine += '|';	//Ajoute le delimiteur à la chaine
+		
+		System.out.println("Ecrireversreseau : " + chaine);
 		try {
 			
 			for(int i=0; i < chaine.length(); i++)

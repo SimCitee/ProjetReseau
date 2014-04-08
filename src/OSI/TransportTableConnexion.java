@@ -54,8 +54,10 @@ public class TransportTableConnexion {
 	
 	public void fermerConnexion(int applicationPid)
 	{
-		//Marque la connexion comme non établie
-		getTransportTableLigneByAppId(applicationPid).setConnectionEstablished(false);
+		//Supprime la ligne de connexion
+		TransportTableLigne t = getTransportTableLigneByAppId(applicationPid);
+		tableConnexion.remove(t);
+
 	}
 	
 	//Retourne l'adresse source en fonction d'un PID
@@ -74,7 +76,16 @@ public class TransportTableConnexion {
 	//Détermine si une application est en état connecté
 	public boolean getEstConnecte(int applicationPid)
 	{
-		return getTransportTableLigneByAppId(applicationPid).isConnectionEstablished();
+		TransportTableLigne t = getTransportTableLigneByAppId(applicationPid);
+		
+		if(t == null)
+		{
+			return false;
+		}
+		else
+		{
+			return getTransportTableLigneByAppId(applicationPid).isConnectionEstablished();
+		}
 	}
 	
 	//Retourne une ligne de la table de connexion en fonction du pid d'une application

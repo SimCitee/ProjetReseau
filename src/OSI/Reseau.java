@@ -131,6 +131,7 @@ public class Reseau  extends Thread{
 				ajouterTableLigne(commandArray);
 				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(commandArray[0]));
 				
+				//TODO : Il faudrait pas changer le code du if et du else ? Présentement on laisse passer la connexion seulement si elle est un multiple de 27.
 				if (temp % 27 == 0) {
 					paquet = new PaquetAppel(noConnexion, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]));
 					listePaquet.add(paquet);
