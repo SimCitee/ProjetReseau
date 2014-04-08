@@ -31,13 +31,11 @@ public class Reseau  extends Thread{
 		this.reseauIn = reseauIn;
 	}
 	
-	//Début du thread
+	//Debut du thread
 	public void run()
 	{
-		//Débute la lecture de la couche transport
+		//Debute la lecture de la couche transport
 		lireDeTransport();
-		
-		
 	}
 	
 	//Lecture de la couche transport
@@ -108,7 +106,7 @@ public class Reseau  extends Thread{
         }
 	}
 	
-	//Les commande complètes provenant de la couche transport sont ici!!!
+	//Les commande completes provenant de la couche transport sont ici!!!
 	private void executerCommandeTransport(String command)
 	{
 		String[] commandArray = null;
@@ -119,7 +117,6 @@ public class Reseau  extends Thread{
 		boolean versLiaison = true;
 		int noConnexion;
 		
-
 		System.out.println("Reseau recois une commande de transport : " + command);
 		
 		// ON ENVOIE A LIAISON
@@ -131,7 +128,7 @@ public class Reseau  extends Thread{
 				ajouterTableLigne(commandArray);
 				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(commandArray[0]));
 				
-				if (temp % 27 == 0) {
+				if ((temp % 27) != 0) {
 					paquet = new PaquetAppel(noConnexion, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]));
 					listePaquet.add(paquet);
 				}
@@ -160,7 +157,7 @@ public class Reseau  extends Thread{
 						data += " ";
 				}
 				nbPaquet = (int)Math.ceil(data.length() / 128);
-				
+								
 				do {
 					if (data.length() < 128) {
 						paquet = new PaquetDonnee(noConnexion, String.valueOf(nopr), "0", String.valueOf(nops), data);
@@ -188,7 +185,7 @@ public class Reseau  extends Thread{
 		
 		
 		// ON RECOIT DE LIAISON
-		
+				
 		if (versLiaison == true) {
 			for(int i = 0; i < listePaquet.size(); i++) {
 				reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));

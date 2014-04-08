@@ -45,6 +45,6 @@ public class PaquetIndicationLiberation extends Paquet {
 
 	@Override
 	public String toString() {
-		return this.numeroConnexion + " " + this.typePaquet.toString() + " " + adresseSource + " " + adresseDestination + " " + raison + "\n";
+		return "Voie logique: "+ this.numeroVoieLogique + " Type paquet: " + this.typePaquet.toString() + " Adresse source: " + adresseSource + " Adresse destination: " + adresseDestination + " Raison: " + raison + "\n";
 	}
 }

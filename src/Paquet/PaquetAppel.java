@@ -29,6 +29,6 @@ public class PaquetAppel extends Paquet {
 
 	@Override
 	public String toString() {
-		return this.numeroConnexion + " " + this.typePaquet.toString() + " " + adresseSource + " " + adresseDestination + "\n";
+		return "Voie logique: "+ this.numeroVoieLogique + " Type paquet: " + this.typePaquet.toString() + " Adresse source: " + adresseSource + " Adresse destination: " + adresseDestination + "\n";
 	}
 }

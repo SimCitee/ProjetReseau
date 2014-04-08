@@ -15,13 +15,11 @@ public class LecteurFichier {
 	private String filepath;
 	private FileInputStream fis = null;
     private BufferedReader reader = null;
-
 	
 	public LecteurFichier(String filepath)
 	{
 		this.filepath = filepath;
 	}
-	
 	
 	public boolean open()
 	{
@@ -36,8 +34,6 @@ public class LecteurFichier {
 			e.printStackTrace();
 			return false;
 		}
-
-
 	}
 	
 	public String readLine()
@@ -52,8 +48,7 @@ public class LecteurFichier {
 			return "null";
 		}
 	}
-	
-	
+
 	public void close()
 	{
 		try

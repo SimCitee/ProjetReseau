@@ -23,7 +23,6 @@ public class Liaison {
 	private static TableLiaison table;
 	
 	protected Liaison() {
-		
 	}
 	
 	// Singleton
@@ -38,6 +37,7 @@ public class Liaison {
 	
 	//inscrit tout les paquets venant de la couche reseau dans un fichier
 	public Paquet lireDeReseau(Paquet paquet) {
+				
 		//inscrire le paquet dans le fichier de sortie
 		ecrireVersFichier(Constante.L_ECR_NAME, paquet);
 		
@@ -95,15 +95,20 @@ public class Liaison {
 			}
 		}
 		
+		// si un paquet a ete creer, ecrire dans le fichier de sortie
 		if (reponse != null) {
 			//inscrire le paquet dans le fichier de sortie
 			ecrireVersFichier(Constante.L_LEC_NAME, reponse);
 		}
 		
 		return reponse;
-		
 	}
 	
+	/*
+	 * Ecrit le contenu d'un paquet dans un fichier
+	 * Parametres: nom du fichier, paquet
+	 * Valeur de retour: aucune
+	 */
 	private void ecrireVersFichier(String nomFichier, Paquet paquet) {
 				
 		try {

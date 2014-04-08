@@ -11,6 +11,6 @@ public class PaquetDonnee extends Paquet {
 
 	@Override
 	public String toString() {
-		return this.numeroConnexion + " " + this.typePaquet.toString() + donnee + "\n";
+		return "Voie logique: "+ this.numeroVoieLogique + " Type paquet: " + this.typePaquet.toString() + " Donnees: " + donnee + "\n";
 	}
 }
