@@ -8,11 +8,11 @@ public class Paquet {
 		this.numeroVoieLogique = numeroConnexion;
 	}
 	
-	public int getNumeroConnexion() {
+	public int getNumeroVoieLogique() {
 		return numeroVoieLogique;
 	}
 
-	public void setNumeroConnexion(int numeroConnexion) {
+	public void setNumeroVoieLogique(int numeroConnexion) {
 		this.numeroVoieLogique = numeroConnexion;
 	}
 

@@ -49,11 +49,11 @@ public class Liaison {
 	private Paquet lireDePhysique(Paquet paquet) {
 		
 		Paquet reponse = null;
+		int noVoieLogique = paquet.getNumeroVoieLogique();
 		
 		// Si le paquet est une demande de connection
 		if (paquet instanceof PaquetAppel) {
 			
-			int noConnexion = ((PaquetAppel) paquet).getNumeroConnexion();
 			int adresseSource = ((PaquetAppel) paquet).getAdresseSource();
 			int adresseDestination = ((PaquetAppel) paquet).getAdresseDestination();
 			
@@ -63,16 +63,16 @@ public class Liaison {
 			// Si l'adresse source est un multiple de 13, refuser la connexion
 			} else if ((((PaquetAppel) paquet).getAdresseSource() % 13) == 0) {
 				
-				table.retirerLigne(noConnexion);
+				table.retirerLigne(noVoieLogique);
 				
-				reponse = new PaquetIndicationLiberation(noConnexion, adresseSource, adresseDestination, "distant");
+				reponse = new PaquetIndicationLiberation(noVoieLogique, adresseSource, adresseDestination, "distant");
 				
 			// Sinon, accepter la connexion
 			} else {
 				
-				table.ajoutLigne(noConnexion, adresseSource, adresseDestination);
+				table.ajoutLigne(noVoieLogique, adresseSource, adresseDestination);
 				
-				reponse = new PaquetCommunicationEtablie(noConnexion, adresseSource, adresseDestination);
+				reponse = new PaquetCommunicationEtablie(noVoieLogique, adresseSource, adresseDestination);
 			}
 		}
 		// Si paquet de donnees
@@ -80,8 +80,10 @@ public class Liaison {
 			Random rand = new Random();
 			int aleatoire = rand.nextInt(7);
 			
-			String pr = ((PaquetDonnee) paquet).getTypePaquet().getPr();
-			int noConnexion = ((PaquetDonnee) paquet).getNumeroConnexion();
+			// A confirmer!!
+			String pr = ((PaquetDonnee) paquet).getTypePaquet().getPs() + 1;
+			
+			int noConnexion = ((PaquetDonnee) paquet).getNumeroVoieLogique();
 			int adresseSource = table.getSourceAddress(noConnexion);
 			
 			// Si adresse source est un multiple de 15, ne recoit pas d'acquittement
@@ -93,6 +95,8 @@ public class Liaison {
 			} else {
 				reponse = new PaquetAcquittement(noConnexion, pr);
 			}
+		} else if (paquet instanceof PaquetIndicationLiberation) {
+			table.retirerLigne(noVoieLogique);
 		}
 		
 		// si un paquet a ete creer, ecrire dans le fichier de sortie

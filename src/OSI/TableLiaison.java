@@ -2,6 +2,7 @@ package OSI;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 /*
  * Contient la table de connexions de la couche Liaison
  */
@@ -26,26 +27,24 @@ public class TableLiaison {
 		
 	}
 	
-	public void retirerLigne(int noConnexion) {
-		for (LiaisonTableLigne ligne : this.table) {
-			if(ligne.getNoConnexion() == noConnexion)
-			{
-				this.table.remove(ligne);
-			}
-		}
+	public void retirerLigne(int noVoieLogique) {
+		LiaisonTableLigne t = getLiaisonTableLigneByNoVoieLogique(noVoieLogique);
+				
+		if(t != null)
+			table.remove(t);
 	}
 	
 	//Retourne l'adresse source en fonction d'un PID
-	public int getSourceAddress(int noConnexion)
+	public int getSourceAddress(int noVoieLogique)
 	{
-		return getLiaisonTableLigneByNoConnexion(noConnexion).getSourceAddress();	
+		return getLiaisonTableLigneByNoVoieLogique(noVoieLogique).getSourceAddress();	
 	}
 	
 	//Retourne une ligne de la table de connexion en fonction du numero de connexion
-	private LiaisonTableLigne getLiaisonTableLigneByNoConnexion(int noConnexion)
+	private LiaisonTableLigne getLiaisonTableLigneByNoVoieLogique(int noVoieLogique)
 	{
 		for (LiaisonTableLigne ligne : this.table) {
-			if(ligne.getNoConnexion() == noConnexion)
+			if(ligne.getNoVoieLogique() == noVoieLogique)
 			{
 				return ligne;
 			}
@@ -58,21 +57,21 @@ public class TableLiaison {
 	//Ligne de la table de connexion
 	private class LiaisonTableLigne
 	{
-		private int noConnexion;
+		private int noVoieLogique;
 		private int sourceAddress;
 		private int destinationAddress;
 		
-		public LiaisonTableLigne(int noConnexion, int sourceAddress, int destinationAddress) {
-			this.noConnexion = noConnexion;
+		public LiaisonTableLigne(int noVoieLogique, int sourceAddress, int destinationAddress) {
+			this.noVoieLogique = noVoieLogique;
 			this.sourceAddress = sourceAddress;
 			this.destinationAddress = destinationAddress;
 		}
 		
-		public int getNoConnexion() {
-			return noConnexion;
+		public int getNoVoieLogique() {
+			return noVoieLogique;
 		}
-		public void setNoConnexion(int noConnexion) {
-			this.noConnexion = noConnexion;
+		public void setNoVoieLogique(int noVoieLogique) {
+			this.noVoieLogique = noVoieLogique;
 		}
 		public int getSourceAddress() {
 			return sourceAddress;
@@ -90,7 +89,7 @@ public class TableLiaison {
 
 		@Override
 		public String toString() {
-			return "LiaisonTableLigne [noConnexion=" + noConnexion
+			return "LiaisonTableLigne [noVoieLogique=" + noVoieLogique
 					+ ", sourceAddress=" + sourceAddress
 					+ ", destinationAddress=" + destinationAddress
 					+ "]";

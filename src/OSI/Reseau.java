@@ -64,23 +64,21 @@ public class Reseau  extends Thread{
 						//Fermeture du tube de lecture
 						reseauIn.close();
 						
-						//Arrêt de lecture de la couche réseau
+						//Arret de lecture de la couche reseau
 						break;
 					}
 				}
 				else
 				{
-					//Ajoute le charactère lu à la chaine
+					//Ajoute le charactere lu a� la chaine
 					command += c;
 				}
 			
-			//Demande d'arrêt par le producteur
-			//}while((int)c != 65535);
+			//Demande d'arret par le producteur
 			}while(true);
           
 		} catch(Exception e) {
 			e.printStackTrace();
-			//throw new RuntimeException(e);
 			System.out.println("Arret de lecture de la couche reseau");
         }
 	}
@@ -88,15 +86,11 @@ public class Reseau  extends Thread{
 	//ecriture sur la couche transport
 	public void ecrireVersTransport(String chaine)
 	{
-		chaine += '|';	//Ajoute le délimiteur à la chaîne
+		chaine += '|';	//Ajoute le delimiteur a la chaine
 		try {
 			
 			for(int i=0; i < chaine.length(); i++)
-			{
-				//System.out.println("Ecriture de : " + chaine.charAt(i));
 				reseauOut.write(chaine.charAt(i));
-				//transportOut.write('c');
-			}
           
 			reseauOut.flush();
 			
@@ -201,7 +195,7 @@ public class Reseau  extends Thread{
 					}
 				}
 				if (reponse instanceof PaquetAcquittementNegatif) {
-					tableConnexion.augmenterPR(reponse.getNumeroConnexion());
+					tableConnexion.augmenterPR(reponse.getNumeroVoieLogique());
 					augmenterPaquetPR(listePaquet, i+1);
 					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 					
@@ -217,8 +211,8 @@ public class Reseau  extends Thread{
 				else if (reponse instanceof PaquetAcquittement) {
 					// TODO On fait quoi quand on a un paquet d'acquittement positif
 					
-					tableConnexion.augmenterPR(reponse.getNumeroConnexion());
-					tableConnexion.augmenterPS(reponse.getNumeroConnexion());
+					tableConnexion.augmenterPR(reponse.getNumeroVoieLogique());
+					tableConnexion.augmenterPS(reponse.getNumeroVoieLogique());
 					augmenterPaquetPR(listePaquet, i+1);
 					augmenterPaquetPS(listePaquet, i+1);
 				}
