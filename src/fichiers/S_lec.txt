@@ -1,28 +1,2 @@
 1 open
-1 envoi de donnees vers le distant #1
-2 open
-4 open
-13 open
-26 open
-12 open
-3 open
-3 envoi de donnees vers le distant #3
-4 envoi de donner de plus de 128 octets. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet.
 1 close
-13 envoi de donnees de la part de #13
-2 envoi de donnees vers le distant #2
-3 envoi de d'autres donnees au distant #3
-3 close
-26 envoi de donnees de la part de # 26
-19 open
-2 close
-26 close
-13 close
-4 close
-27 open
-27 ces donnees ne devrais pas se rendre jusqu'a la couche liaison
-27 close
-19 envoi donner de la part de #19
-19 close
-12 envoi de donnee de la part de #12
-12 close

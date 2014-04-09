@@ -1,0 +1,6 @@
+Si stationSource est un multiple de 27 : Le fournisseur (Reseau) refuse la connexion
+Si stationSource multiple de 19 : Pas de reponse (Liaison)
+Si stationSource multiple de 13 : Refus de connexion du distant
+
+Reseau de recoit pas de paquet d'acquittement si l'adresse de la station source est un multiple de 15
+Reseau recoit un acquittement negatif si le PS est egal au numero aleatoire entre 0 et 7

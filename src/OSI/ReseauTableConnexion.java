@@ -60,7 +60,10 @@ public class ReseauTableConnexion {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNoConnexion() == noConnexion) {
 				currentPS = ligne.getPs();
-				ligne.setPs(currentPS++);
+				if (currentPS == 7)
+					ligne.setPs(0);
+				else
+					ligne.setPs(currentPS++);
 				break;
 			}
 		}
@@ -70,7 +73,10 @@ public class ReseauTableConnexion {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNoConnexion() == noConnexion) {
 				currentPR = ligne.getPr();
-				ligne.setPr(currentPR++);
+				if (currentPR == 7)
+					ligne.setPr(0);
+				else
+					ligne.setPr(currentPR++);
 				break;
 			}
 		}

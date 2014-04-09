@@ -171,7 +171,7 @@ public class Reseau  extends Thread{
 					}
 					compteurPaquet++;
 				} while (compteurPaquet < nbPaquet);
-				
+				break;
 			case "N_DISCONNECT.req" : 
 				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(commandArray[0]));
 				
@@ -193,6 +193,10 @@ public class Reseau  extends Thread{
 				// Temporisateur
 				if (reponse == null) {
 					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
+					if (reponse == null) {
+						ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Pas de reponse");
+						tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
+					}
 				}
 				if (reponse instanceof PaquetAcquittementNegatif) {
 					tableConnexion.augmenterPR(reponse.getNumeroConnexion());

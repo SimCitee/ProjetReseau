@@ -91,7 +91,7 @@ public class Transport extends Thread{
 		//Fermeture de connexion
 		else if (command.equals("close"))
 		{
-			fermerConnexion(applicationPid);
+			//fermerConnexion(applicationPid);
 		}
 		
 		//Envoie de donnees
@@ -121,9 +121,10 @@ public class Transport extends Thread{
 	}
 	
 	//Ferme une connexion en fonction du pid de l'application. Demande par l'utilisateur (fichier S_lec)
-	private void fermerConnexion(int applicationPid)
+	private void fermerConnexion(int applicationPid, String sourceAddress, String destinationAddress)
 	{
 		tableConnexion.fermerConnexion(applicationPid);
+		ecrireVersReseau(applicationPid + " " + Constante.DISCONNECT_REQ + " " + sourceAddress + " " + destinationAddress);
 	}
 	
 	private void envoyerDonnees(int pid, String donnees)
@@ -145,7 +146,7 @@ public class Transport extends Thread{
 	{
 		chaine += '|';	//Ajoute le delimiteur à la chaine
 		
-		System.out.println("Ecrireversreseau : " + chaine);
+		//System.out.println("Ecrireversreseau : " + chaine);
 		try {
 			
 			for(int i=0; i < chaine.length(); i++)
@@ -255,6 +256,7 @@ public class Transport extends Thread{
 	private void fermerConnexionParReseau(int pid, int adresseEnReponse, String raison)
 	{
 		tableConnexion.fermerConnexion(pid);
+		
 	}
 	
 	//TODO Effacer cette methode (tests uniquement)
