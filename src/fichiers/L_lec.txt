@@ -7,3 +7,15 @@ Voie logique: 6 Type paquet: [00001111] Adresse source: 175 Adresse destination:
 Voie logique: 7 Type paquet: [00001111] Adresse source: 214 Adresse destination: 29
 Voie logique: 8 Type paquet: [00001111] Adresse source: 97 Adresse destination: 226
 Voie logique: 9 Type paquet: [00001111] Adresse source: 31 Adresse destination: 155
+Voie logique: 1 Type paquet: [00010011] Adresse source: 117 Adresse destination: 207 Raison: 00000001
+Voie logique: 3 Type paquet: [00001111] Adresse source: 115 Adresse destination: 98
+Voie logique: 4 Type paquet: [00001111] Adresse source: 70 Adresse destination: 112
+Voie logique: 5 Type paquet: [00001111] Adresse source: 36 Adresse destination: 188
+Voie logique: 6 Type paquet: [00001111] Adresse source: 2 Adresse destination: 0
+Voie logique: 7 Type paquet: [00010011] Adresse source: 143 Adresse destination: 48 Raison: 00000001
+Voie logique: 2 Type paquet: [00001111] Adresse source: 116 Adresse destination: 235
+Voie logique: 3 Type paquet: [00010011] Adresse source: 52 Adresse destination: 188 Raison: 00000001
+Voie logique: 4 Type paquet: [00001111] Adresse source: 174 Adresse destination: 43
+Voie logique: 5 Type paquet: [00010011] Adresse source: 156 Adresse destination: 62 Raison: 00000001
+Voie logique: 6 Type paquet: [00001111] Adresse source: 105 Adresse destination: 123
+Voie logique: 7 Type paquet: [00001111] Adresse source: 12 Adresse destination: 203
