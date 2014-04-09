@@ -16,7 +16,21 @@ public class ReseauTableConnexion {
 		ReseauTableLigne ligne = new ReseauTableLigne(noConnexion, addSource, addDest, niec);
 		tableConnexionReseau.add(ligne);
 	}
-	
+
+	public int findAddSource(int niec) {
+		for(ReseauTableLigne ligne : tableConnexionReseau) {
+			if (ligne.getNiec() == niec)
+				return ligne.getAddSource();
+		}
+		return 0;
+	}
+	public int findAddDest(int niec) {
+		for(ReseauTableLigne ligne : tableConnexionReseau) {
+			if (ligne.getNiec() == niec)
+				return ligne.getAddDest();
+		}
+		return 0;
+	}
 	public int findNoConnexion(int niec) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNiec() == niec)
@@ -60,7 +74,10 @@ public class ReseauTableConnexion {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNoConnexion() == noConnexion) {
 				currentPS = ligne.getPs();
-				ligne.setPs(currentPS++);
+				if (currentPS == 7)
+					ligne.setPs(0);
+				else
+					ligne.setPs(currentPS++);
 				break;
 			}
 		}
@@ -70,7 +87,10 @@ public class ReseauTableConnexion {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNoConnexion() == noConnexion) {
 				currentPR = ligne.getPr();
-				ligne.setPr(currentPR++);
+				if (currentPR == 7)
+					ligne.setPr(0);
+				else
+					ligne.setPr(currentPR++);
 				break;
 			}
 		}

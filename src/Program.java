@@ -2,6 +2,8 @@ import java.io.IOException;
 import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 
+import util.RedacteurFichier;
+import OSI.Constante;
 import OSI.Reseau;
 import OSI.Transport;
 
@@ -9,9 +11,13 @@ import OSI.Transport;
 public class Program {
 
 	public static void main(String[] args) {
-
+		
 		try
 		{ 
+			// Suppression des fichiers anterieurs
+			RedacteurFichier.supprimerFichier(Constante.L_ECR_NAME);
+			RedacteurFichier.supprimerFichier(Constante.L_LEC_NAME);
+			RedacteurFichier.supprimerFichier(Constante.S_ECR_NAME);
 			
 			//Cree les pipes
 			PipedOutputStream transportOut = new PipedOutputStream();

@@ -156,7 +156,8 @@ public class Reseau  extends Thread{
 					if (i < commandArray.length - 1)
 						data += " ";
 				}
-				nbPaquet = (int)Math.ceil(data.length() / 128);
+
+				nbPaquet = (int)Math.ceil((double)data.length() / 128);
 								
 				do {
 					if (data.length() < 128) {
@@ -171,7 +172,7 @@ public class Reseau  extends Thread{
 					}
 					compteurPaquet++;
 				} while (compteurPaquet < nbPaquet);
-				
+				break;
 			case "N_DISCONNECT.req" : 
 				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(commandArray[0]));
 				
@@ -179,8 +180,6 @@ public class Reseau  extends Thread{
 				listePaquet.add(paquet);
 				tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 				break;
-				// TODO
-				// Manque la gestion de la reponse de liaison (Pas encore coder du cote Liaison)
 		}
 		
 		
@@ -191,8 +190,15 @@ public class Reseau  extends Thread{
 				reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 			
 				// Temporisateur
-				if (reponse == null) {
+				if ((reponse == null)  && (!(listePaquet.get(i) instanceof PaquetIndicationLiberation))) {
 					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
+					if (reponse == null) {
+						int addSource = tableConnexion.findAddSource(Integer.parseInt(commandArray[0]));
+						int addDest = tableConnexion.findAddDest(Integer.parseInt(commandArray[0]));
+						ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + addSource + " " + addDest + " Pas de reponse");
+						tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
+						break;
+					}
 				}
 				if (reponse instanceof PaquetAcquittementNegatif) {
 					tableConnexion.augmenterPR(reponse.getNumeroConnexion());
@@ -222,7 +228,7 @@ public class Reseau  extends Thread{
 
 	private void augmenterPaquetPR(ArrayList<Paquet> listePaquet, int compteur) {
 		int temp;
-		for (int i = compteur; i < listePaquet.size(); i++) {
+		for (int i = compteur; i < listePaquet.size()-1; i++) {
 			temp = Integer.parseInt(listePaquet.get(i).getTypePaquet().getPr());
 			temp++;
 			listePaquet.get(i+1).getTypePaquet().setPr(String.valueOf(temp));
@@ -231,7 +237,7 @@ public class Reseau  extends Thread{
 	
 	private void augmenterPaquetPS(ArrayList<Paquet> listePaquet, int compteur) {
 		int temp;
-		for (int i = compteur; i < listePaquet.size(); i++) {
+		for (int i = compteur; i < listePaquet.size()-1; i++) {
 			temp = Integer.parseInt(listePaquet.get(i).getTypePaquet().getPs());
 			temp++;
 			listePaquet.get(i+1).getTypePaquet().setPs(String.valueOf(temp));

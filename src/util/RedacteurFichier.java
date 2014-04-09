@@ -16,10 +16,12 @@ public class RedacteurFichier {
 		try {
 			File fichier = new File(path);
 			
-			if (!fichier.exists()) {
-				fichier.createNewFile();
+			if (fichier.exists()) {
+				fichier.delete();
 			}
-						
+			
+			fichier.createNewFile();
+			
 			FileWriter fw = new FileWriter(fichier.getAbsoluteFile(), true);
 			BufferedWriter bw = new BufferedWriter(fw);
 			
@@ -27,6 +29,13 @@ public class RedacteurFichier {
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+	public static void supprimerFichier(String path) {
+		File fichier = new File(path);
+		
+		if (fichier.exists()) {
+			fichier.delete();
 		}
 	}
 }
