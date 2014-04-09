@@ -5,7 +5,9 @@ import java.io.PipedInputStream;
 import java.io.PipedOutputStream;
 import java.util.Random;
 
+import Paquet.Paquet;
 import util.LecteurFichier;
+import util.RedacteurFichier;
 
 /*
  * Couche transport
@@ -19,6 +21,8 @@ public class Transport extends Thread{
 	
 	//Table des connexions
 	private TransportTableConnexion tableConnexion = new TransportTableConnexion();
+	
+	
 	
 	public Transport(PipedOutputStream transportOut, PipedInputStream transportIn)
 	{
@@ -91,7 +95,16 @@ public class Transport extends Thread{
 		//Fermeture de connexion
 		else if (command.equals("close"))
 		{
-			//fermerConnexion(applicationPid);
+			
+			if(tableConnexion.getEstConnecte(applicationPid))
+			{
+				int sourceAddress = tableConnexion.getSourceAddress(applicationPid);
+				int destinationAddress = tableConnexion.getDestinationAddress(applicationPid);
+				ecrireVersReseau(applicationPid + " " + Constante.DISCONNECT_REQ + " " + sourceAddress + " " + destinationAddress);
+			
+				fermerConnexion(applicationPid);
+			}
+			
 		}
 		
 		//Envoie de donnees
@@ -121,10 +134,9 @@ public class Transport extends Thread{
 	}
 	
 	//Ferme une connexion en fonction du pid de l'application. Demande par l'utilisateur (fichier S_lec)
-	private void fermerConnexion(int applicationPid, String sourceAddress, String destinationAddress)
+	private void fermerConnexion(int applicationPid)
 	{
 		tableConnexion.fermerConnexion(applicationPid);
-		ecrireVersReseau(applicationPid + " " + Constante.DISCONNECT_REQ + " " + sourceAddress + " " + destinationAddress);
 	}
 	
 	private void envoyerDonnees(int pid, String donnees)
@@ -222,23 +234,30 @@ public class Transport extends Thread{
 		}
 		else
 		{
-			String splitCommand[] = command.split("\\s");
+			String splitCommand[] = command.split("\\s", 3);
 			int pid = Integer.parseInt(splitCommand[0]);
 			String primitive = splitCommand[1];
-			int adresseEnReponse = Integer.parseInt(splitCommand[2]);
-			
+			String primitiveParam = splitCommand[2];
+			//int adresseSource = Integer.parseInt(splitCommand[2]);
+			//int adresseDestination = Integer.parseInt(splitCommand[3]);
 			
 			//Reception d'une indication de deconnexion (distant ou couche reseau)
 			if(primitive.equals(Constante.DISCONNECT_IND))
 			{
-				String raison = splitCommand[3];
+				String splitCommand2[] = primitiveParam.split("\\s", 3);
+				int adresseSource = Integer.parseInt(splitCommand2[0]);
+				int adresseDestination = Integer.parseInt(splitCommand2[1]);
+				String raison = splitCommand2[2];
 				
-				fermerConnexionParReseau(pid, adresseEnReponse, raison);
+				fermerConnexionParReseau(pid, adresseSource, adresseDestination, raison);
 			}
 			//Reception d'une confirmation de connexion
 			else if(primitive.equals(Constante.CONNECT_CONF))
 			{
-				confirmerConnexion(pid, adresseEnReponse);
+				String splitCommand2[] = primitiveParam.split("\\s", 2);
+				int adresseSource = Integer.parseInt(splitCommand2[0]);
+				int adresseDestination = Integer.parseInt(splitCommand2[1]);
+				confirmerConnexion(pid, adresseSource, adresseDestination);
 			}
 		}
 		
@@ -247,15 +266,21 @@ public class Transport extends Thread{
 	}
 	
 	//Marque une connexion comme confirmee
-	private void confirmerConnexion(int pid, int adresseEnReponse)
+	private void confirmerConnexion(int pid, int adresseSource, int adresseDestination)
 	{
 		tableConnexion.confirmerConnexion(pid);
+		
+		ecrireVersFichier("L'application # " + pid + " Adresse source : " + adresseSource +
+				" Adresse destination : " + adresseDestination);
 	}
 	
 	//Ferme la connexion dans le cas ou la couche reseau ou le distant le decide
-	private void fermerConnexionParReseau(int pid, int adresseEnReponse, String raison)
+	private void fermerConnexionParReseau(int pid, int adresseSource, int adresseDestination, String raison)
 	{
 		tableConnexion.fermerConnexion(pid);
+		
+		ecrireVersFichier("L'application # " + pid + " Adresse source : " + adresseSource +
+				" Adresse destination : " + adresseDestination + " Raison : " + raison);
 		
 	}
 	
@@ -265,5 +290,14 @@ public class Transport extends Thread{
 		tableConnexion.afficher();
 		System.out.println("*******************************************************************");
 		
+	}
+	
+	private void ecrireVersFichier(String ligne) {
+		
+		try {
+			RedacteurFichier.ecrireFichier(Constante.S_ECR_NAME, ligne);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
