@@ -16,7 +16,21 @@ public class ReseauTableConnexion {
 		ReseauTableLigne ligne = new ReseauTableLigne(noConnexion, addSource, addDest, niec);
 		tableConnexionReseau.add(ligne);
 	}
-	
+
+	public int findAddSource(int niec) {
+		for(ReseauTableLigne ligne : tableConnexionReseau) {
+			if (ligne.getNiec() == niec)
+				return ligne.getAddSource();
+		}
+		return 0;
+	}
+	public int findAddDest(int niec) {
+		for(ReseauTableLigne ligne : tableConnexionReseau) {
+			if (ligne.getNiec() == niec)
+				return ligne.getAddDest();
+		}
+		return 0;
+	}
 	public int findNoConnexion(int niec) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNiec() == niec)
