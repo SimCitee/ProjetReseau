@@ -1,1 +1,1 @@
-Voie logique: 1 Type paquet: [00001111] Adresse source: 47 Adresse destination: 226
+Voie logique: 1 Type paquet: [00001111] Adresse source: 142 Adresse destination: 57

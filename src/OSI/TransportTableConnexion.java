@@ -44,19 +44,23 @@ public class TransportTableConnexion {
 		
 		tableConnexion.add(transportTableLigne);
 		
+		System.out.println("sss");
+
 	}
 	//Ouvre une connexion (status = "established")
 	public void confirmerConnexion(int applicationPid)
 	{
 		//Marque la connexion comme étant établie
-		getTransportTableLigneByAppId(applicationPid).setConnectionEstablished(true);;
+		getTransportTableLigneByAppId(applicationPid).setConnectionEstablished(true);
 	}
 	
 	public void fermerConnexion(int applicationPid)
 	{
 		//Supprime la ligne de connexion
 		TransportTableLigne t = getTransportTableLigneByAppId(applicationPid);
-		tableConnexion.remove(t);
+		
+		if(t != null)
+			tableConnexion.remove(t);
 
 	}
 	
