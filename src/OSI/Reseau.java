@@ -180,8 +180,6 @@ public class Reseau  extends Thread{
 				listePaquet.add(paquet);
 				tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 				break;
-				// TODO
-				// Manque la gestion de la reponse de liaison (Pas encore coder du cote Liaison)
 		}
 		
 		
@@ -192,13 +190,14 @@ public class Reseau  extends Thread{
 				reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 			
 				// Temporisateur
-				if (reponse == null) {
+				if ((reponse == null)  && (!(listePaquet.get(i) instanceof PaquetIndicationLiberation))) {
 					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 					if (reponse == null) {
 						int addSource = tableConnexion.findAddSource(Integer.parseInt(commandArray[0]));
 						int addDest = tableConnexion.findAddDest(Integer.parseInt(commandArray[0]));
 						ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + addSource + " " + addDest + " Pas de reponse");
 						tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
+						break;
 					}
 				}
 				if (reponse instanceof PaquetAcquittementNegatif) {
