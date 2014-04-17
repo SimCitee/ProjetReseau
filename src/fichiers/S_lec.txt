@@ -1,3 +1,18 @@
 1 open
 1 Il etait une fois un petit birel qui avait mal aux pattes, il appela androune pour lui signaler le probleme. Cette derniere fit comme si de rien n'etait et ignorait completement Birel. Birel mouru ainsi avec son mal de patte.
 1 close
+2 open
+2 donnees de la connexion #2
+2 close
+3 open
+3 donnees de la connexion #3
+3 close
+4 open
+4 donnees de la connexion #4
+4 close
+5 open
+5 donnees de la connexion #5
+5 close
+6 open
+6 donnees de la connexion #6
+6 close

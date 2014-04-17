@@ -2,6 +2,8 @@ package OSI;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import util.AdresseArbitraire;
 /*
  * Contient la table de connexions de la couche trnasport
  */
@@ -14,6 +16,9 @@ public class TransportTableConnexion {
 	boolean[] usedAddress = new boolean[NB_ADDRESSE_DISPONIBLE];
 	
 	private ArrayList<TransportTableLigne> tableConnexion = new ArrayList<TransportTableLigne>();
+	
+	//Sert à obtenir des addresse arbitraires pour les tests. Voir methode "getUnusedAddress()"
+	private AdresseArbitraire adresseArbitraire = new AdresseArbitraire();
 	
 	
 	public TransportTableConnexion()
@@ -107,6 +112,11 @@ public class TransportTableConnexion {
 		
 	//Retourne une adresse aléatoire, non utilisée dans [0,249]
 	//Retourne -1 si la table d'adresse est pleine
+	//NB : Décommenter cette méthode pour obtenir les vrais addresses
+	//     aléatoires. Présentement cette méthode est remplacé par une méthode
+	//     qui permet de retourner les addresse qui cause des traitements
+	//     spécifiques (multiple de 19, de 13, etc.)
+/*
 	private int getUnusedAddress()
 	{
 		Integer address = null;
@@ -137,7 +147,49 @@ public class TransportTableConnexion {
 		
 		return address;
 	}
+*/
 	
+	//Méthode qui retournes des addresse arbitraires qui cause des traitements différents
+	//NB : voir la méthode "getUnusedAddress()" plus haut qui est commenté
+	private int getUnusedAddress()
+	{
+		Integer address = null;
+		boolean newAddressFound = false;
+		
+		//Vérifie s'il reste de la place dans la table d'adresse
+		if(nbUsedAddress == NB_ADDRESSE_DISPONIBLE)
+		{
+			//La table est pleine
+			return -1;
+		}
+		
+		address = adresseArbitraire.getNouvelleAddresse();
+		
+		//S'il n'y a plus d'adresse arbitraire, on en retourne une aléatoire
+		if(address == null)
+		{
+			
+			//Randomise jusqu'à une adresse libre
+			while(!newAddressFound)
+			{
+				Random rand = new Random();
+				address = rand.nextInt(NB_ADDRESSE_DISPONIBLE);	//[0,249]
+				
+				//Si l'adresse n'est pas utilisée
+				if(usedAddress[address] == false)
+				{
+					
+					newAddressFound = true;			//Sort de la boucle
+				}
+				
+			}
+		}
+		
+		usedAddress[address] = true;	//Marque l'adresse comme indisponible
+		nbUsedAddress++;				//Incrémente le nombre d'adresses utilisées
+		
+		return address;
+	}
 	
 	//TODO Effacer cette methode (tests uniquement)
 	public void afficher()
