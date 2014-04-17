@@ -16,9 +16,9 @@ public class RedacteurFichier {
 		try {
 			File fichier = new File(path);
 			
-			if (fichier.exists()) {
+			/*if (fichier.exists()) {
 				fichier.delete();
-			}
+			}*/
 			
 			fichier.createNewFile();
 			
@@ -31,6 +31,12 @@ public class RedacteurFichier {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * Supprimer un fichier s'il existe
+	 * Parametres: chemin vers le fichier
+	 * Valeur de retour: aucune
+	 */
 	public static void supprimerFichier(String path) {
 		File fichier = new File(path);
 		
