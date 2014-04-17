@@ -1,4 +1,0 @@
-Voie logique: 1 Type paquet: [VAL:00001111] Adresse source: 62 Adresse destination: 214
-Voie logique: 1 Type paquet: [VAL:01001, PR:0]
-Voie logique: 1 Type paquet: [VAL:00001, PR:1]
-Voie logique: 1 Type paquet: [VAL:00001, PR:1]

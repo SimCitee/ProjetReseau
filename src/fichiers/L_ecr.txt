@@ -1,5 +1,0 @@
-Voie logique: 1 Type paquet: [VAL:00001011] Adresse source: 62 Adresse destination: 214
-Voie logique: 1 Type paquet: [PR:0, M:1, PS:0, FBIT:0] Donnees: Il etait une fois un petit birel qui avait mal aux pattes, il appela androune pour lui signaler le probleme. Cette derniere fit 
-Voie logique: 1 Type paquet: [PR:0, M:1, PS:0, FBIT:0] Donnees: Il etait une fois un petit birel qui avait mal aux pattes, il appela androune pour lui signaler le probleme. Cette derniere fit 
-Voie logique: 1 Type paquet: [PR:0, M:0, PS:0, FBIT:0] Donnees: comme si de rien n'etait et ignorait completement Birel. Birel mouru ainsi avec son mal de patte.
-Voie logique: 1 Type paquet: [VAL:00010011] Adresse source: 62 Adresse destination: 214 Raison: 00000001
