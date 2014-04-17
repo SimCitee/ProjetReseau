@@ -269,17 +269,18 @@ public class Transport extends Thread{
 	private void confirmerConnexion(int pid, int adresseSource, int adresseDestination)
 	{
 		tableConnexion.confirmerConnexion(pid);
-		
-		ecrireVersFichier("L'application # " + pid + " Adresse source : " + adresseSource +
+System.out.println("confirmerConnexion");
+		ecrireVersFichier("Confirmation de connexion! Application # " + pid + " Adresse source : " + adresseSource +
 				" Adresse destination : " + adresseDestination);
 	}
 	
 	//Ferme la connexion dans le cas ou la couche reseau ou le distant le decide
 	private void fermerConnexionParReseau(int pid, int adresseSource, int adresseDestination, String raison)
 	{
+		System.out.println("fermerConnexionParReseau");
 		tableConnexion.fermerConnexion(pid);
 		
-		ecrireVersFichier("L'application # " + pid + " Adresse source : " + adresseSource +
+		ecrireVersFichier("Le réseau ferme la connexion! Application # " + pid + " Adresse source : " + adresseSource +
 				" Adresse destination : " + adresseDestination + " Raison : " + raison);
 		
 	}
@@ -295,7 +296,7 @@ public class Transport extends Thread{
 	private void ecrireVersFichier(String ligne) {
 		
 		try {
-			RedacteurFichier.ecrireFichier(Constante.S_ECR_NAME, ligne);
+			RedacteurFichier.ecrireFichier(Constante.S_ECR_NAME, ligne + "\n");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

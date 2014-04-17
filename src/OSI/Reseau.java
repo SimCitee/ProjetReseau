@@ -70,7 +70,7 @@ public class Reseau  extends Thread{
 				}
 				else
 				{
-					//Ajoute le charactere lu a  la chaine
+					//Ajoute le charactere lu aï¿½ la chaine
 					command += c;
 				}
 			
@@ -201,7 +201,7 @@ public class Reseau  extends Thread{
 					
 				}
 				if (reponse instanceof PaquetIndicationLiberation) {
-					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Distant");
+					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Distant libÃ¨re la connexion");
 					tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 				}
 				else if (reponse instanceof PaquetCommunicationEtablie) {
