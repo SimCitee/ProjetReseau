@@ -81,7 +81,7 @@ public class Liaison {
 			int aleatoire = rand.nextInt(7);
 			
 			// A confirmer!!
-			String pr = ((PaquetDonnee) paquet).getTypePaquet().getPs() + 1;
+			int pr = Integer.parseInt(((PaquetDonnee) paquet).getTypePaquet().getPs());
 			
 			int noConnexion = ((PaquetDonnee) paquet).getNumeroVoieLogique();
 			int adresseSource = table.getSourceAddress(noConnexion);
@@ -90,10 +90,12 @@ public class Liaison {
 			if ((adresseSource % 15) == 0) { 
 				return null;
 			// Si le Ps du paquet est equivalent au numero tire aleatoirement, acquittement negatif
-			} else if (paquet.getTypePaquet().getDecimalPs() == aleatoire) {
-				reponse = new PaquetAcquittementNegatif(noConnexion, pr);
+			} else if (Integer.parseInt(paquet.getTypePaquet().getPs()) == aleatoire) {
+				reponse = new PaquetAcquittementNegatif(noConnexion, String.valueOf(pr));
 			} else {
-				reponse = new PaquetAcquittement(noConnexion, pr);
+				// Incrementer le Pr pour indiquer la prochaine trame attendue
+				pr++;
+				reponse = new PaquetAcquittement(noConnexion, String.valueOf(pr));
 			}
 		} else if (paquet instanceof PaquetIndicationLiberation) {
 			table.retirerLigne(noVoieLogique);
