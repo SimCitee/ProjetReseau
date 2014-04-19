@@ -1,6 +1,6 @@
 package Paquet;
 
-public class Paquet {
+public abstract class Paquet {
 	protected int numeroVoieLogique;
 	protected TypePaquet typePaquet;
 	

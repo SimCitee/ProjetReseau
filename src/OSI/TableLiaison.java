@@ -4,24 +4,22 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /*
- * Contient la table de connexions de la couche Liaison
+ * Contient la table de voie logique de la couche Liaison
  */
 public class TableLiaison {
 	
 	private ArrayList<LiaisonTableLigne> table = new ArrayList<LiaisonTableLigne>();
 	
-	public TableLiaison()
-	{
-		
+	public TableLiaison() {	
 	}
 	
-	//ajouter une ligne dans la table
-	public void ajoutLigne(int noConnexion, int adresseSource, int adresseDestination)
+	// ajouter une ligne dans la table
+	public void ajoutLigne(int noVoieLogique, int adresseSource, int adresseDestination)
 	{
 		
-		//Cree une ligne de données de connexion et la met dans la table de connexion
+		// Cree une ligne de donnees de connexion et la met dans la table de connexion
 		LiaisonTableLigne transportTableLigne = 
-				new LiaisonTableLigne(noConnexion, adresseSource, adresseDestination);		
+				new LiaisonTableLigne(noVoieLogique, adresseSource, adresseDestination);		
 		
 		table.add(transportTableLigne);
 		
@@ -54,7 +52,7 @@ public class TableLiaison {
 	}
 		
 	
-	//Ligne de la table de connexion
+	//Ligne de la table de voie logique
 	private class LiaisonTableLigne
 	{
 		private int noVoieLogique;

@@ -145,7 +145,7 @@ public class Transport extends Thread{
 		//Verifie si l'application est connecte
 		if(tableConnexion.getEstConnecte(pid))
 		{
-			//Evoie les donnees � la couche reseau
+			//Evoie les donnees vers la couche reseau
 			ecrireVersReseau(pid + " " + Constante.DATA_REQ + " " + donnees);
 		}
 		else
@@ -156,7 +156,7 @@ public class Transport extends Thread{
 	
 	private void ecrireVersReseau(String chaine)
 	{
-		chaine += '|';	//Ajoute le delimiteur à la chaine
+		chaine += '|';	//Ajoute le delimiteur a la chaine
 		
 		//System.out.println("Ecrireversreseau : " + chaine);
 		try {
@@ -280,7 +280,7 @@ System.out.println("confirmerConnexion");
 		System.out.println("fermerConnexionParReseau");
 		tableConnexion.fermerConnexion(pid);
 		
-		ecrireVersFichier("Le réseau ferme la connexion! Application # " + pid + " Adresse source : " + adresseSource +
+		ecrireVersFichier("Le reseau ferme la connexion! Application # " + pid + " Adresse source : " + adresseSource +
 				" Adresse destination : " + adresseDestination + " Raison : " + raison);
 		
 	}

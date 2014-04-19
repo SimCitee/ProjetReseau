@@ -16,16 +16,21 @@ import Paquet.PaquetIndicationLiberation;
 
 import java.util.Random;
 
-
+//Singleton
 public class Liaison {
 	
 	private static Liaison instance = null;
-	private static TableLiaison table;
+	private static TableLiaison table;						// table contenant les numeros de voie logique pour chaque connexion
+	
+	private final int _PAQUETAPPEL_MULT_NOANSWER = 19;		// multiple pour paquet appel (aucune reponse si multiple)
+	private final int _PAQUETAPPEL_MULT_REFUSE = 13;		// multiple pour paquet appel (paquet refus de connexion si multiple)
+	private final int _PAQUETDONNEES_MULT_NOANSWER = 15;	// multiple pour paquet donnees (aucune reponse si multiple)
+	private final int _MAX_RAND = 7;						// definit le maximum pour les nombres generes aleatoirement
 	
 	protected Liaison() {
 	}
 	
-	// Singleton
+	// constructeur
 	public static Liaison getInstance() {
 		if (instance == null) {
 			instance = new Liaison();
@@ -35,7 +40,12 @@ public class Liaison {
 		return instance;
 	}
 	
-	//inscrit tout les paquets venant de la couche reseau dans un fichier
+	/*
+	 * Inscrit tout les paquets venant de la couche reseau dans un fichier et fait appel a
+	 * une simulation d'une lecture de la couche physique
+	 * Parametre: paquet sortant
+	 * Valeur de retour: paquet entrant (reponse)
+	 */
 	public Paquet lireDeReseau(Paquet paquet) {
 				
 		//inscrire le paquet dans le fichier de sortie
@@ -45,7 +55,11 @@ public class Liaison {
 		return lireDePhysique(paquet);
 	}
 	
-	// Simule la reception des paquets du distant en generant les paquets de reponses
+	/*
+	 * Simule la reception des paquets du distant en generant les paquets de reponses
+	 * Parametre: paquet sortant
+	 * Valeur de retour: paquet entrant (reponse)
+	 */
 	private Paquet lireDePhysique(Paquet paquet) {
 		
 		Paquet reponse = null;
@@ -54,49 +68,48 @@ public class Liaison {
 		// Si le paquet est une demande de connection
 		if (paquet instanceof PaquetAppel) {
 			
+			// Obtenir les adresses source et destination du paquet
 			int adresseSource = ((PaquetAppel) paquet).getAdresseSource();
 			int adresseDestination = ((PaquetAppel) paquet).getAdresseDestination();
 			
 			// Si l'adresse source est un multiple de 19, aucune reponse
-			if ((((PaquetAppel) paquet).getAdresseSource() % 19) == 0) {
+			if ((((PaquetAppel) paquet).getAdresseSource() % _PAQUETAPPEL_MULT_NOANSWER) == 0) {
 				
 			// Si l'adresse source est un multiple de 13, refuser la connexion
-			} else if ((((PaquetAppel) paquet).getAdresseSource() % 13) == 0) {
+			} else if ((((PaquetAppel) paquet).getAdresseSource() % _PAQUETAPPEL_MULT_REFUSE) == 0) {
 				
+				// retirer la connexion de la table
 				table.retirerLigne(noVoieLogique);
-				
+				//preparer un paquet d'indication de liberation
 				reponse = new PaquetIndicationLiberation(noVoieLogique, adresseSource, adresseDestination, "distant");
 				
 			// Sinon, accepter la connexion
 			} else {
-				
 				table.ajoutLigne(noVoieLogique, adresseSource, adresseDestination);
-				
 				reponse = new PaquetCommunicationEtablie(noVoieLogique, adresseSource, adresseDestination);
 			}
 		}
 		// Si paquet de donnees
 		else if (paquet instanceof PaquetDonnee) {
 			Random rand = new Random();
-			int aleatoire = rand.nextInt(7);
-			
-			// A confirmer!!
+			int aleatoire = rand.nextInt(_MAX_RAND);
 			int pr = Integer.parseInt(((PaquetDonnee) paquet).getTypePaquet().getPs());
 			
-			int noConnexion = ((PaquetDonnee) paquet).getNumeroVoieLogique();
-			int adresseSource = table.getSourceAddress(noConnexion);
+			// obtenir l'adresse source du paquet a l'aide de la table de voie logique
+			int adresseSource = table.getSourceAddress(noVoieLogique);
 			
 			// Si adresse source est un multiple de 15, ne recoit pas d'acquittement
-			if ((adresseSource % 15) == 0) { 
-				return null;
+			if ((adresseSource % _PAQUETDONNEES_MULT_NOANSWER) == 0) { 
+				
 			// Si le Ps du paquet est equivalent au numero tire aleatoirement, acquittement negatif
 			} else if (Integer.parseInt(paquet.getTypePaquet().getPs()) == aleatoire) {
-				reponse = new PaquetAcquittementNegatif(noConnexion, String.valueOf(pr));
+				reponse = new PaquetAcquittementNegatif(noVoieLogique, String.valueOf(pr));
 			} else {
 				// Incrementer le Pr pour indiquer la prochaine trame attendue
 				pr++;
-				reponse = new PaquetAcquittement(noConnexion, String.valueOf(pr));
+				reponse = new PaquetAcquittement(noVoieLogique, String.valueOf(pr));
 			}
+		// Si paquet d'indication de liberation, retirer la connexion de la table
 		} else if (paquet instanceof PaquetIndicationLiberation) {
 			table.retirerLigne(noVoieLogique);
 		}

@@ -35,7 +35,7 @@ public class AdresseArbitraire {
 		if(curseur >= adresses.length)
 			return null;
 		
-		//Si l'adresse demandé est pour la destination (on utilise une addresse random)
+		//Si l'adresse demandee est pour la destination (on utilise une addresse random)
 		if(compteurAddresse++ % 2 == 1)
 			return null;
 		

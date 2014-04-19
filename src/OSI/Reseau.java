@@ -24,6 +24,7 @@ public class Reseau  extends Thread{
 	PipedInputStream reseauIn;
 	private int compteurNoConnexion = 1;
 	private ReseauTableConnexion tableConnexion = new ReseauTableConnexion();
+	private final int _LONGUEUR_PAQUET = 128;
 	
 	public Reseau(PipedOutputStream reseauOut, PipedInputStream reseauIn)
 	{
@@ -38,7 +39,11 @@ public class Reseau  extends Thread{
 		lireDeTransport();
 	}
 	
-	//Lecture de la couche transport
+	/*
+	 * Lecture de la couche transport des donnees de la couche transport
+	 * Parametre: aucun
+	 * Valeur de retour: aucune
+	 */
 	private void lireDeTransport()
 	{
 		
@@ -58,7 +63,7 @@ public class Reseau  extends Thread{
 					}
 					else{
 						
-						//Envoi le signal d'arret de lecture à la couche transport
+						//Envoi le signal d'arret de lecture a la couche transport
 						ecrireVersTransport("stop");
 						
 						//Fermeture du tube de lecture
@@ -70,7 +75,7 @@ public class Reseau  extends Thread{
 				}
 				else
 				{
-					//Ajoute le charactere lu a� la chaine
+					//Ajoute le charactere lu a la chaine
 					command += c;
 				}
 			
@@ -99,8 +104,12 @@ public class Reseau  extends Thread{
 			throw new RuntimeException(e);
         }
 	}
-	
-	//Les commande completes provenant de la couche transport sont ici!!!
+
+	/*
+	 * Traite les commandes provenant de la couche Transport et effectue le traitement necessaire qui s'en suit
+	 * Parametre: commande de la couche transport
+	 * Valeur de retour: aucune
+	 */
 	private void executerCommandeTransport(String command)
 	{
 		String[] commandArray = null;
@@ -151,16 +160,16 @@ public class Reseau  extends Thread{
 						data += " ";
 				}
 
-				nbPaquet = (int)Math.ceil((double)data.length() / 128);
+				nbPaquet = (int)Math.ceil((double)data.length() / _LONGUEUR_PAQUET);
 								
 				do {
-					if (data.length() < 128) {
+					if (data.length() < _LONGUEUR_PAQUET) {
 						paquet = new PaquetDonnee(noConnexion, String.valueOf(nopr), "0", String.valueOf(nops), data);
 						listePaquet.add(paquet);
 					}
 					else {
-						dataTemp = data.substring(0, 128);
-						data = data.substring(128);
+						dataTemp = data.substring(0, _LONGUEUR_PAQUET);
+						data = data.substring(_LONGUEUR_PAQUET);
 						paquet = new PaquetDonnee(noConnexion, String.valueOf(nopr), "1", String.valueOf(nops), dataTemp);
 						listePaquet.add(paquet);
 					}
@@ -201,7 +210,7 @@ public class Reseau  extends Thread{
 					
 				}
 				if (reponse instanceof PaquetIndicationLiberation) {
-					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Distant libère la connexion");
+					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Distant libere la connexion");
 					tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 				}
 				else if (reponse instanceof PaquetCommunicationEtablie) {

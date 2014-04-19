@@ -71,8 +71,4 @@ public class TypePaquet {
 		else
 			return "[PR:"+ pr + ", M:" + m + ", PS:" + ps + ", FBIT:" + last + "]";
 	}
-	
-	public int getDecimalPs() {
-		return Integer.parseInt(this.ps, 2);
-	}
 }
