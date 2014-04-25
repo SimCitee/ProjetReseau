@@ -2,21 +2,30 @@ package OSI;
 
 import java.util.ArrayList;
 
+// Table de connexion de la couche Reseau
 public class ReseauTableConnexion {
 
+	// Table des connexions
 	private ArrayList<ReseauTableLigne> tableConnexionReseau = new ArrayList<ReseauTableLigne>();
 	
+	// Constructeur vide de la table des connexions
 	public ReseauTableConnexion()
 	{
 		
 	}
 	
+	// Methode permettant d'ajouter une connexion a la table des connexions
+	// Parametre : Numero de voie logique, Addresse source, Addresse destination, Identifiant d'extremite de connexion
+	// Valeur de retour : Aucun
 	public void nouvelleConnexion(int noConnexion, int addSource, int addDest, int niec) {
 		
 		ReseauTableLigne ligne = new ReseauTableLigne(noConnexion, addSource, addDest, niec);
 		tableConnexionReseau.add(ligne);
 	}
-
+	
+	// Methode permettant d'obtenir l'adresse source d'une connexion
+	// Parametre : Identifiant d'extremite de connexion
+	// Valeur de retour : Adresse source
 	public int findAddSource(int niec) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNiec() == niec)
@@ -24,6 +33,10 @@ public class ReseauTableConnexion {
 		}
 		return 0;
 	}
+	
+	// Methode permettant d'obtenir l'adresse destination d'une connexion
+	// Parametre : Identifiant d'extremite de connexion
+	// Valeur de retour : Adresse destination
 	public int findAddDest(int niec) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNiec() == niec)
@@ -31,6 +44,10 @@ public class ReseauTableConnexion {
 		}
 		return 0;
 	}
+	
+	// Methode permettant d'obtenir le numero de voie logique d'une connexion
+	// Parametre : Identifiant d'extremite de connexion
+	// Valeur de retour : Numero de voie logique
 	public int findNoConnexion(int niec) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNiec() == niec)
@@ -38,6 +55,10 @@ public class ReseauTableConnexion {
 		}
 		return 0;
 	}
+	
+	// Methode permettant d'obtenir la valeur de P(S) d'une connexion
+	// Parametre : Numero de voie logique
+	// Valeur de retour : La valeur de P(S)
 	public int findNoPs(int noConnexion) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNoConnexion() == noConnexion)
@@ -45,6 +66,10 @@ public class ReseauTableConnexion {
 		}
 		return 0;
 	}
+	
+	// Methode permettant d'obtenir la valeur de P(R) d'une connexion
+	// Parametre : Numero de voie logique
+	// Valeur de retour : La valeur de P(R)
 	public int findNoPr(int noConnexion) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNoConnexion() == noConnexion)
@@ -53,6 +78,9 @@ public class ReseauTableConnexion {
 		return 0;
 	}
 	
+	// Methode permettant de retirer une connexion de la table des connexions
+	// Parametre : Identifiant d'extremite de connexion
+	// Valeur de retour : Aucun
 	public void deleteLigne(int niec) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNiec() == niec) {
@@ -61,6 +89,10 @@ public class ReseauTableConnexion {
 			}
 		}
 	}
+	
+	// Methode permettant de changer le status d'une connexion (Confirmer une connexion)
+	// Parametre : Identifiant d'extremite de connexion
+	// Valeur de retour : Aucun
 	public void connexionConfirmer(int niec) {
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
 			if (ligne.getNiec() == niec) {
@@ -69,6 +101,10 @@ public class ReseauTableConnexion {
 			}
 		}
 	}
+	
+	// Methode permettant d'augmenter la valeur de P(S) d'une connexion
+	// Parametre : Numero de voie logique
+	// Valeur de retour : Aucun
 	public void augmenterPS(int noConnexion) {
 		int currentPS;
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
@@ -82,6 +118,10 @@ public class ReseauTableConnexion {
 			}
 		}
 	}
+	
+	// Methode permettant d'augmenter la valeur de P(R) d'une connexion
+	// Parametre : Numero de voie logique
+	// Valeur de retour : Aucun
 	public void augmenterPR(int noConnexion) {
 		int currentPR;
 		for(ReseauTableLigne ligne : tableConnexionReseau) {
@@ -96,15 +136,17 @@ public class ReseauTableConnexion {
 		}
 	}
 	
+	// Classe representant une connexion de la table des connexion
 	private class ReseauTableLigne {
-		private int noConnexion;
-		private int addSource;
-		private int addDest;
-		private boolean isConnectionEstablished;
+		private int noConnexion;  // Numero de voie logique
+		private int addSource;    // Addresse source
+		private int addDest;      // Adresse destination
+		private boolean isConnectionEstablished; // Vrai si la connexion a ete etablie
 		private int niec; // Identifiant d'extremite de connexion
-		private int pr;
-		private int ps;
+		private int pr;  // Numero du paquet que l'on envoie
+		private int ps;  // Numero du prochain paquet que l'on attend du distant
 		
+		// Constructeur de la classe representant une une connexion de la table des connexions
 		public ReseauTableLigne(int noConnexion, int addSource, int addDest, int niec) {
 			this.noConnexion = noConnexion;
 			this.addSource = addSource;
@@ -115,6 +157,7 @@ public class ReseauTableConnexion {
 			this.ps = 0;
 		}
 
+		// Ci-dessous : Les getters et les setters de tout les attributs de la classe ReseauTableLigne
 		public int getNoConnexion() {
 			return noConnexion;
 		}
