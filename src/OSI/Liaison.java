@@ -74,10 +74,10 @@ public class Liaison {
 			
 			// Si l'adresse source est un multiple de 19, aucune reponse
 			if ((((PaquetAppel) paquet).getAdresseSource() % _PAQUETAPPEL_MULT_NOANSWER) == 0) {
-				
+				System.out.println("Couche Liaison: Paquet appel, aucune reponse, adresse source : " + ((PaquetAppel) paquet).getAdresseSource());
 			// Si l'adresse source est un multiple de 13, refuser la connexion
 			} else if ((((PaquetAppel) paquet).getAdresseSource() % _PAQUETAPPEL_MULT_REFUSE) == 0) {
-				
+				System.out.println("Couche Liaison: Paquet appel, refu de connexion, adresse source : " + ((PaquetAppel) paquet).getAdresseSource());
 				// retirer la connexion de la table
 				table.retirerLigne(noVoieLogique);
 				//preparer un paquet d'indication de liberation
@@ -100,9 +100,10 @@ public class Liaison {
 			
 			// Si adresse source est un multiple de 15, ne recoit pas d'acquittement
 			if ((adresseSource % _PAQUETDONNEES_MULT_NOANSWER) == 0) { 
-				
+				System.out.println("Couche Liaison: Paquet donnees, aucune reponse, adresse source " + adresseSource);
 			// Si le Ps du paquet est equivalent au numero tire aleatoirement, acquittement negatif
 			} else if (Integer.parseInt(paquet.getTypePaquet().getPs()) == aleatoire) {
+				System.out.println("Couche Liaison: Paquet donnees, acquittement negatif, Ps=" + adresseSource +", Rand="+aleatoire);
 				reponse = new PaquetAcquittementNegatif(noVoieLogique, String.valueOf(pr));
 			} else {
 				// Incrementer le Pr pour indiquer la prochaine trame attendue
