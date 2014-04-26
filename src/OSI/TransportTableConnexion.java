@@ -197,7 +197,7 @@ public class TransportTableConnexion {
 		
 		//Header
 		System.out.format("%15s%15s%15s%15s\n", "PID", "Source", 
-				"Destination", "État");
+				"Destination", "Etat");
 		
 		for(TransportTableLigne ligne : tableConnexion)
 		{

@@ -179,6 +179,7 @@ public class Reseau  extends Thread{
 						listePaquet.add(paquet); // Ajout du paquet a la liste des paquets
 					} 
 					compteurPaquet++; // On incrémente le compteur de paquet
+					nops++;	// incrementer le Ps
 					// Tant que le compteur de paquet est plus petit que le nombre de paquet necessaire
 				} while (compteurPaquet < nbPaquet);
 				break;
@@ -186,7 +187,7 @@ public class Reseau  extends Thread{
 				// Recuperation du numero de voie logique dans la table de connexion
 				noConnexion = tableConnexion.findNoConnexion(Integer.parseInt(commandArray[0]));
 				// Construction du paquet d'indication de liberation
-				paquet = new PaquetIndicationLiberation(noConnexion, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]), "distant");
+				paquet = new PaquetIndicationLiberation(noConnexion, Integer.parseInt(commandArray[2]), Integer.parseInt(commandArray[3]), "reseau");
 				listePaquet.add(paquet); // Ajout du paquet a la liste des paquets
 				// Suppression de la connexion dans la table de connexion
 				tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));

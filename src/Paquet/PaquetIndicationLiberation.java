@@ -28,9 +28,9 @@ public class PaquetIndicationLiberation extends Paquet {
 	}
 
 	public void setRaison(String refu) {
-		if(refu == "distant") {
+		if(refu.equalsIgnoreCase("distant")) {
 			this.raison = DISTANT;
-		} else {
+		} else if (refu.equalsIgnoreCase("reseau")) {
 			this.raison = FOURNISSEUR;
 		}
 	}
