@@ -49,8 +49,6 @@ public class TransportTableConnexion {
 		
 		tableConnexion.add(transportTableLigne);
 		
-		System.out.println("sss");
-
 	}
 	//Ouvre une connexion (status = "established")
 	public void confirmerConnexion(int applicationPid)

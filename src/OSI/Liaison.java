@@ -103,15 +103,22 @@ public class Liaison {
 				System.out.println("Couche Liaison: Paquet donnees, aucune reponse, adresse source " + adresseSource);
 			// Si le Ps du paquet est equivalent au numero tire aleatoirement, acquittement negatif
 			} else if (Integer.parseInt(paquet.getTypePaquet().getPs()) == aleatoire) {
-				System.out.println("Couche Liaison: Paquet donnees, acquittement negatif, Ps=" + adresseSource +", Rand="+aleatoire);
+				int ps = Integer.parseInt(paquet.getTypePaquet().getPs());
+				System.out.println("Couche Liaison: Paquet donnees, acquittement negatif, Ps=" + ps +", Rand="+aleatoire);
 				reponse = new PaquetAcquittementNegatif(noVoieLogique, String.valueOf(pr));
 			} else {
 				// Incrementer le Pr pour indiquer la prochaine trame attendue
-				pr++;
+				pr = ((pr+1) < 8) ? (pr+1) : 0;
 				reponse = new PaquetAcquittement(noVoieLogique, String.valueOf(pr));
+				System.out.println("Couche Liaison: Paquet donnees, acquittement positif, Pr=" + pr);
 			}
 		// Si paquet d'indication de liberation, retirer la connexion de la table
 		} else if (paquet instanceof PaquetIndicationLiberation) {
+			table.retirerLigne(noVoieLogique);
+		}
+		
+		// retirer la ligne de la table
+		if (reponse instanceof PaquetIndicationLiberation) { 
 			table.retirerLigne(noVoieLogique);
 		}
 		

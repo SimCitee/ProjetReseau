@@ -166,6 +166,8 @@ public class Reseau  extends Thread{
 				
 				// Segmentation des données pour faire plusieurs paquets, si necessaire
 				do {
+					nops = (nops < 8) ? nops : 0;
+					
 					if (data.length() < _LONGUEUR_PAQUET) { // Si plus petit que 128 caracteres
 						// Construction du paquet de donnees
 						paquet = new PaquetDonnee(noConnexion, String.valueOf(nopr), "0", String.valueOf(nops), data);
@@ -222,6 +224,16 @@ public class Reseau  extends Thread{
 					// Seconde tentative d'envoie du paquet
 					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 					
+					if (reponse instanceof PaquetAcquittementNegatif) { // Si toujours pas de reponse, on libere la connexion
+						int addSource = tableConnexion.findAddSource(Integer.parseInt(commandArray[0]));
+						int addDest = tableConnexion.findAddDest(Integer.parseInt(commandArray[0]));
+						// On voie une indication d'indication de liberation a Transport
+						ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + addSource + " " + addDest + " Pas de reponse");
+						// On supprime la connexion de la table de connexion
+						tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
+						break;
+					}
+					
 				}
 				// Paquet d'indication de liberation recu de liaison de donnees
 				if (reponse instanceof PaquetIndicationLiberation) {
@@ -242,8 +254,8 @@ public class Reseau  extends Thread{
 					// Augmenter les valeurs de P(S) et de P(R) dans les paquets et dans la table de connexion
 					tableConnexion.augmenterPR(reponse.getNumeroVoieLogique());
 					tableConnexion.augmenterPS(reponse.getNumeroVoieLogique());
-					augmenterPaquetPR(listePaquet, i+1);
-					augmenterPaquetPS(listePaquet, i+1);
+					//augmenterPaquetPR(listePaquet, i+1);
+					//augmenterPaquetPS(listePaquet, i+1);
 				}
 			}
 		}
