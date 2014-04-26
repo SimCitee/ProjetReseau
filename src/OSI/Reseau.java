@@ -136,6 +136,7 @@ public class Reseau  extends Thread{
 					versLiaison = false; // On envoie rien au distant
 					// On envoie une primitive d'indication de liberation a la couche Transport
 					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Refus de connexion");
+					System.out.println("Couche reseau : Envoie de la primitive N_DISCONNECT.ind a Transport suite a un refus de connexion"); 
 					// On supprime la connexion de la table des connexions
 					tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 				} 
@@ -206,12 +207,14 @@ public class Reseau  extends Thread{
 				// Declenchement du temporisateur
 				if ((reponse == null)  && (!(listePaquet.get(i) instanceof PaquetIndicationLiberation))) {
 					// Deuxieme tentative d'envoie du paquet
+					System.out.println("Couche Reseau : Declenchement du temporisateur...");
 					reponse = Liaison.getInstance().lireDeReseau(listePaquet.get(i));
 					if (reponse == null) { // Si toujours pas de reponse, on libere la connexion
 						int addSource = tableConnexion.findAddSource(Integer.parseInt(commandArray[0]));
 						int addDest = tableConnexion.findAddDest(Integer.parseInt(commandArray[0]));
 						// On voie une indication d'indication de liberation a Transport
 						ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + addSource + " " + addDest + " Pas de reponse");
+						System.out.println("Couche Reseau : Envoie de la primitive N_DISCONNECT.ind a Transport - Pas de response");
 						// On supprime la connexion de la table de connexion
 						tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 						break;
@@ -229,6 +232,7 @@ public class Reseau  extends Thread{
 						int addDest = tableConnexion.findAddDest(Integer.parseInt(commandArray[0]));
 						// On voie une indication d'indication de liberation a Transport
 						ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + addSource + " " + addDest + " Pas de reponse");
+						System.out.println("Couche Reseau : Envoie de la primitive N_DISCONNECT.ind a Transport - Pas de reponse");
 						// On supprime la connexion de la table de connexion
 						tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 						break;
@@ -239,6 +243,7 @@ public class Reseau  extends Thread{
 				if (reponse instanceof PaquetIndicationLiberation) {
 					// On envoie un indication de liberation a Transport
 					ecrireVersTransport(commandArray[0] + " N_DISCONNECT.ind " + commandArray[2] + " " + commandArray[3] + " Distant libere la connexion");
+					System.out.println("Couche Reseau : Envoie de la primitive N_DISCONNECT.ind a Transport - Liberation de la connexion par le distant");
 					// On supprime la connexion de la table des connexions
 					tableConnexion.deleteLigne(Integer.parseInt(commandArray[0]));
 				}
@@ -246,6 +251,7 @@ public class Reseau  extends Thread{
 				else if (reponse instanceof PaquetCommunicationEtablie) {
 					// Envoie de la primitive de confirmation de connexion a Transport
 					ecrireVersTransport(commandArray[0] + " N_CONNECT.conf " + commandArray[2] + " " + commandArray[3]);
+					System.out.println("Couche Reseau : Envoie de la primitive N_CONNECT.conf a Transport");
 					// Mettre l'etat de la connexion a Etablie dans la table de connexion
 					tableConnexion.connexionConfirmer(Integer.parseInt(commandArray[0]));
 				}
