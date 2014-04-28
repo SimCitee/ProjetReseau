@@ -12,6 +12,7 @@ public class TransportTableConnexion {
 	//Garde la trace du nb. d'adresse utilisées. On pourra déterminer quand la table d'adress est pleine.
 	private int nbUsedAddress = 0;
 	private static final int NB_ADDRESSE_DISPONIBLE = 250;
+	
 	//Adresse en cours d'utilisation (array = traitement + rapide que liste)
 	boolean[] usedAddress = new boolean[NB_ADDRESSE_DISPONIBLE];
 	
@@ -20,11 +21,6 @@ public class TransportTableConnexion {
 	//Sert à obtenir des addresse arbitraires pour les tests. Voir methode "getUnusedAddress()"
 	private AdresseArbitraire adresseArbitraire = new AdresseArbitraire();
 	
-	
-	public TransportTableConnexion()
-	{
-		
-	}
 	
 	//Ouvre une connexion (status = "En cours...")
 	public void openConnection(int applicationPid)
@@ -43,9 +39,6 @@ public class TransportTableConnexion {
 		//Crée une ligne de données de connexion et la met dans la table de connexion
 		TransportTableLigne transportTableLigne = 
 				new TransportTableLigne(applicationPid, adresseSource, adresseDestination);
-		
-		//System.out.println(transportTableLigne.toString());
-		
 		
 		tableConnexion.add(transportTableLigne);
 		
@@ -188,8 +181,8 @@ public class TransportTableConnexion {
 		
 		return address;
 	}
+
 	
-	//TODO Effacer cette methode (tests uniquement)
 	public void afficher()
 	{
 		

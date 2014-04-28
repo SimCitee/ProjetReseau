@@ -114,8 +114,7 @@ public class Transport extends Thread{
 			envoyerDonnees(applicationPid, command);
 		}
 		
-		//TODO à enlever
-		//afficherTable();
+		
 	}
 	
 	//Ouverture d'une connexion
@@ -148,10 +147,7 @@ public class Transport extends Thread{
 			//Evoie les donnees vers la couche reseau
 			ecrireVersReseau(pid + " " + Constante.DATA_REQ + " " + donnees);
 		}
-		else
-		{
-			//TODO afficher message d'erreur (envoi de donnees sans connexion)
-		}
+		
 	}
 	
 	private void ecrireVersReseau(String chaine)
@@ -217,7 +213,7 @@ public class Transport extends Thread{
           
 		} catch(Exception e) {
         	
-			//throw new RuntimeException(e);
+			
 			e.printStackTrace();
 			System.out.println("Arret de lecture de la couche transport");
         }
@@ -238,8 +234,7 @@ public class Transport extends Thread{
 			int pid = Integer.parseInt(splitCommand[0]);
 			String primitive = splitCommand[1];
 			String primitiveParam = splitCommand[2];
-			//int adresseSource = Integer.parseInt(splitCommand[2]);
-			//int adresseDestination = Integer.parseInt(splitCommand[3]);
+			
 			
 			//Reception d'une indication de deconnexion (distant ou couche reseau)
 			if(primitive.equals(Constante.DISCONNECT_IND))
@@ -269,7 +264,7 @@ public class Transport extends Thread{
 	private void confirmerConnexion(int pid, int adresseSource, int adresseDestination)
 	{
 		tableConnexion.confirmerConnexion(pid);
-System.out.println("confirmerConnexion");
+		System.out.println("Connexion établie");
 		ecrireVersFichier("Confirmation de connexion! Application # " + pid + " Adresse source : " + adresseSource +
 				" Adresse destination : " + adresseDestination);
 	}
@@ -277,7 +272,6 @@ System.out.println("confirmerConnexion");
 	//Ferme la connexion dans le cas ou la couche reseau ou le distant le decide
 	private void fermerConnexionParReseau(int pid, int adresseSource, int adresseDestination, String raison)
 	{
-		System.out.println("fermerConnexionParReseau");
 		tableConnexion.fermerConnexion(pid);
 		
 		ecrireVersFichier("Le reseau ferme la connexion! Application # " + pid + " Adresse source : " + adresseSource +
@@ -285,7 +279,7 @@ System.out.println("confirmerConnexion");
 		
 	}
 	
-	//TODO Effacer cette methode (tests uniquement)
+	
 	public void afficherTable()
 	{
 		tableConnexion.afficher();

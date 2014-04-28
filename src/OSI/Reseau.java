@@ -116,7 +116,7 @@ public class Reseau  extends Thread{
 		boolean versLiaison = true;                // Permet de vérifier si l'on envoie un paquet au distant
 		int noConnexion;                           // Numero de voie logique
 		
-		System.out.println("Reseau recois une commande de transport : " + command);
+		System.out.println("Reseau recoit une commande de transport : " + command);
 		
 		// On verifie quelle est la primitive recu de la part de transport
 		switch (commandArray[1]) {
